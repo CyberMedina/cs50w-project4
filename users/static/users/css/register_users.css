@@ -660,3 +660,14 @@ button:hover {
 
 
 /* FIN de segmento para iniciar sesion con google */
+
+/* Estilos para botones activados y desactivados */
+.disabled-button {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.enable-button {
+  pointer-events: all;
+  opacity: 0;
+}

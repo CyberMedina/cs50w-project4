@@ -34,40 +34,39 @@
     <div class="custom-box">
       <div class="custom-inner-box">
         <div class="custom-forms-wrap">
-          <form action="index.html" autocomplete="off" class="sign-in-form">
+          <form action="index.html" autocomplete="off" class="sign-in-form" id="sign-in-form">
+            {% csrf_token %}
             <div class="logo">
-              <a href=""><img
-                  src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}"
-                  alt="easyclass" /></a>
-              <h4><a href="">Vela<span>roma</span></a></h4>
+              <a href=""><img src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="easyclass" /></a>
+              <h4><a href="{% url 'home' %}">Vela<span>roma</span></a></h4>
             </div>
 
             <div class="heading">
               <h2>Iniciemos</h2>
               <h6>¿Ya tienes una cuenta?</h6>
-              <a href="" class="toggle">Inicia Sesión</a>
+              <a href="{% url 'home' %}" class="toggle">Inicia Sesión</a>
             </div>
 
             <div class="actual-form registrarse-actual-form">
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="off" required />
+                <input type="text" class="input-field" autocomplete="off" name="name" id="name" required />
                 <label>Nombre(s)</label>
               </div>
 
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="off" required />
+                <input type="text" class="input-field" autocomplete="off" name="lastname" id="lastname" required />
                 <label>Apellidos(s)</label>
               </div>
 
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="nope" id="email" required />
+                <input type="text" class="input-field" autocomplete="nope" name="email" id="email" required />
                 <label>Correo electrónico</label>
                 <div class="custom-tooltip" id="error-email-tooltip"></div>
               </div>
 
 
               <div class="input-wrap">
-                <input type="password" class="input-field" autocomplete="off" id="password" required />
+                <input type="password" class="input-field" autocomplete="off" id="password" name="password" required />
                 <label>Contraseña</label>
                 <div class="custom-tooltip" id="password-error"></div>
               </div>
@@ -80,7 +79,7 @@
               </div>
 
               <!-- Agrega este botón en el lugar adecuado de tu HTML -->
-              <button class="skip-validation-btn" hidden>Saltar Validaciones</button>
+              <button class="skip-validation-btn">Saltar Validaciones</button>
 
               <button type="button" class="sign-btn toggle" disabled>Continuar</button>
 
@@ -103,7 +102,7 @@
                   Registrarme con Google
                 </button>
               </div>
-             
+
 
               <script>
 
@@ -121,10 +120,8 @@
 
           <form action="index.html" autocomplete="off" class="sign-up-form">
             <div class="logo">
-              <a href=""><img
-                  src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}"
-                  alt="easyclass" /></a>
-              <h4><a href="">Vela<span>roma</span></a></h4>
+              <a href=""><img src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="easyclass" /></a>
+              <h4><a href="{% url 'home' %}">Vela<span>roma</span></a></h4>
             </div>
 
             <div class="heading registrarse-heading">
@@ -143,7 +140,8 @@
               <input type="hidden" id="longitude" name="longitude">
 
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="off" required />
+                <input type="text" class="input-field" autocomplete="off" name="houseNumber" id="houseNumber"
+                  required />
                 <label>Número de casa (Opcional)</label>
               </div>
 
@@ -161,7 +159,7 @@
 
               <div class="input-wrap">
                 <input type="tel" class="input-field" maxlength="8" oninput="limitInputToEightDigits(event)"
-                  autocomplete="off" required />
+                  name="telephoneNumber" id="telephoneNumber" autocomplete="off" required />
                 <label>Número de teléfono</label>
               </div>
 
@@ -185,7 +183,7 @@
                   </label>
                 </div>
                 <div class="radio-button">
-                  <input name="radio-group" id="radio3" class="radio-button__input" type="radio">
+                  <input name="radio-group" id="radio3" name="radio3" class="radio-button__input" type="radio">
                   <label for="radio3" class="radio-button__label">
                     <span class="radio-button__custom"></span>
                     Otros
@@ -193,7 +191,7 @@
                 </div>
               </div>
 
-              <input type="submit" value="Guardar ahora" class="sign-btn" />
+              <input type="submit" value="Guardar ahora" class="sign-btn" id="saveButton" />
 
               <p class="text">
                 Forgotten your password or you login datails?
@@ -205,8 +203,7 @@
 
         <div class="custom-carousel">
           <div class="images-wrapper">
-            <img src="{% static 'users/images/Velaroma login+.png' %} " class="image img-1 show"
-              alt="" />
+            <img src="{% static 'users/images/Velaroma login+.png' %} " class="image img-1 show" alt="" />
             <img src="{% static 'users/images/ubication4.png' %}" class="image img-2" alt="" />
           </div>
 
@@ -257,30 +254,30 @@
       </div>
     </div>
 
-      <!-- Modal HTML -->
-      <div class="modal" id="otrosModal">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="otrosModalLabel">Introduzca el nombre de la dirección</h5>
-            </div>
-            <div class="modal-body">
+    <!-- Modal HTML -->
+    <div class="modal" id="otrosModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="otrosModalLabel">Introduzca el nombre de la dirección</h5>
+          </div>
+          <div class="modal-body">
 
-              <div class="textarea-wrap mt-3">
-                <textarea name="text" id="otros-input" rows="1" oninput="autoGrowTextArea(this)" maxlength="5"
-                  required></textarea>
-                <label for="text">Nombre</label>
-              </div>
-              <div class="label-area">
-                <label class="custom-label" id="char-count">0/5</label>
-              </div>
+            <div class="textarea-wrap mt-3">
+              <textarea name="text" id="otros-input" rows="1" oninput="autoGrowTextArea(this)" maxlength="5"
+                required></textarea>
+              <label for="text">Nombre</label>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="sign-btn" data-dismiss="modal" id="guardarBtn">Guardar</button>
+            <div class="label-area">
+              <label class="custom-label" id="char-count">0/5</label>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="sign-btn" data-dismiss="modal" id="guardarBtn">Guardar</button>
           </div>
         </div>
       </div>
+    </div>
     </div>
 
   </main>
@@ -400,9 +397,9 @@
       const otrosModal = new bootstrap.Modal(document.getElementById("otrosModal"));
       const guardarBtn = document.getElementById("guardarBtn");
       const otrosInputLabel = document.querySelector(".radio-button__label[for='radio3']");
-    
+
       radio3.addEventListener("click", function () {
-      $("#otrosModal").modal("show");
+        $("#otrosModal").modal("show");
       });
 
 
@@ -412,7 +409,51 @@
         otrosModal.hide();
       });
     });
-    </script>
+  </script>
+
+  <script>
+    document.getElementById('saveButton').addEventListener("click", function (e) {
+
+      // document.getElementById('saveButton').classList.add('disabled-button');
+      e.preventDefault();
+
+      // Obtén el token CSRF del formulario
+      let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
+      console.log(csrfToken);
+
+      let data = {
+        csrfmiddlewaretoken: csrfToken,
+        name: document.getElementById('name').value,
+        lastname: document.getElementById('lastname').value,
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        addressInput: document.getElementById('addressInput').value,
+        latitude: document.getElementById('latitude').value,
+        longitude: document.getElementById('longitude').value,
+        houseNumber: document.getElementById('houseNumber').value,
+        text: document.getElementById('text').value,
+        telephoneNumber: document.getElementById('telephoneNumber').value,
+        radio2: document.getElementById('radio2').value
+      };
+
+      fetch('/register_user_API/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.log('Error:', error);
+        });
+
+    });
+  </script>
 </body>
 
 </html>
