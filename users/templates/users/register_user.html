@@ -44,8 +44,9 @@
             <div class="heading">
               <h2>Iniciemos</h2>
               <h6>¿Ya tienes una cuenta?</h6>
-              <a href="{% url 'home' %}" class="toggle">Inicia Sesión</a>
+              <a href="{% url 'home' %}?openModal=true" class="toggle">Inicia Sesión</a>
             </div>
+
 
             <div class="actual-form registrarse-actual-form">
               <div class="input-wrap">
@@ -254,6 +255,25 @@
       </div>
     </div>
 
+    <!-- Modal alerts -->
+    <div class="modal" id="modalAlerts">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Error</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalAlertsBody">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Entendido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal HTML -->
     <div class="modal" id="otrosModal">
       <div class="modal-dialog modal-dialog-centered">
@@ -446,12 +466,24 @@
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.log('Error:', error);
-        });
+          // Handle the response data as needed
+          console.log(data);
 
+          if (data.status === 'success') {
+
+            window.location.href = "/";
+
+
+
+          } else {
+            document.getElementById("modalAlertsBody").innerText = data.message;
+            $("#modalAlerts").modal("show");
+
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     });
   </script>
 </body>

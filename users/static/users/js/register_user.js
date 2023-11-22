@@ -1,6 +1,6 @@
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
-  
+
   // Obtener el formulario y los elementos de entrada
   const form = document.querySelector(".sign-in-form");
   const emailInput = document.querySelector("#email");
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const signBtn = form.querySelector(".sign-btn");
   // Obtén referencia al botón de saltar validaciones
   const skipValidationBtn = document.querySelector(".skip-validation-btn");
-  
+
 
   // Elementos para el correcto cambio de formulario
   const toggle_btn = document.querySelectorAll(".toggle");
@@ -120,7 +120,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   toggle_btn.forEach((btn) => {
     btn.addEventListener("click", () => {
-      main.classList.toggle("sign-up-mode");
+
+
+      // Obtén el token CSRF del formulario
+      let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
+      console.log(csrfToken);
+
+      let data = {
+        csrfmiddlewaretoken: csrfToken,
+        email: document.getElementById('email').value,
+      };
+
+      fetch('/validation_register_API/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data as needed
+          console.log(data);
+
+          if (data.status === 'success') {
+            main.classList.toggle("sign-up-mode");
+
+
+            // Al hacer clic al botón de siguiente este hace la función de moveslider y simula que ha sido tocado un bullet
+            moveSlider.call(bullets[1]);
+
+
+
+          } else {
+            
+            document.getElementById("modalAlertsBody").innerText = data.message;
+            $("#modalAlerts").modal("show");
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.alert(error);
+        });
     });
   });
 
@@ -140,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Al hacer clic al botón de siguiente este hace la función de moveslider y simula que ha sido tocado un bullet
   signBtn.addEventListener("click", () => {
-    moveSlider.call(bullets[1]);
+
   });
 
   // Estado inicial del formulario
