@@ -12,8 +12,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkOE6tdxKR6yicdhzVF7109pAF_zMYzv4&libraries=places&callback=initMap"></script>
+  
   <style>
     #map {
       height: 300px;
@@ -30,6 +29,11 @@
 </head>
 
 <body>
+  <!-- Loader -->
+  <div id="loaderContainer" class="loader-container">
+    <div class="loader"></div>
+  </div>
+
   <main>
     <div class="custom-box">
       <div class="custom-inner-box">
@@ -305,187 +309,14 @@
 
   <!-- Javascript file -->
   <script src="{% static 'users/js/register_user.js' %}"></script>
-  <script>
-    var map;
-    var marker;
-    var searchBox;
 
-    function initMap() {
-      var location = new google.maps.LatLng(12.11501075424433, -86.2360456940407);
-      var mapOptions = {
-        center: location,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: true, // Desactiva la interfaz predeterminada del mapa
-        mapTypeControl: false, // Desactiva el control de tipos de mapa (Satélite, Mapa)
-      };
-      map = new google.maps.Map(document.getElementById("map"), mapOptions);
-      marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        draggable: true
-      });
-
-      google.maps.event.addListener(marker, "dragend", function () {
-        updateAddressFromMarker();
-      });
-
-      searchBox = new google.maps.places.SearchBox(document.getElementById("searchInput"));
-
-      searchBox.addListener("places_changed", function () {
-        var places = searchBox.getPlaces();
-        if (places.length === 0) return;
-
-        var bounds = new google.maps.LatLngBounds();
-        places.forEach(function (place) {
-          if (!place.geometry) return;
-
-          if (place.geometry.viewport) {
-            bounds.union(place.geometry.viewport);
-          } else {
-            bounds.extend(place.geometry.location);
-          }
-
-          // Establecer la ubicación del marcador en la ubicación seleccionada del cuadro de búsqueda
-          marker.setPosition(place.geometry.location);
-          map.fitBounds(bounds);
-          updateAddressFromMarker();
-        });
-      });
-
-      $("#getLocationButton").click(function () {
-        getCurrentLocation();
-      });
-
-      $("#saveLocation").click(function () {
-        var address = $("#addressInput").val();
-        var latitude = marker.getPosition().lat();
-        var longitude = marker.getPosition().lng();
-
-        // Set the values of hidden inputs
-        $("#latitude").val(latitude);
-        $("#longitude").val(longitude);
-
-        alert("Address saved: " + address);
-        $("#myModal").modal("hide");
-      });
-    }
-
-    function updateAddressFromMarker() {
-      var latLng = marker.getPosition();
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ location: latLng }, function (results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-          if (results[0]) {
-            $("#addressInput").val(results[0].formatted_address);
-            $("#selectedLocationLabel").text(results[0].formatted_address);
-          }
-        }
-      });
-    }
-
-    function openModal() {
-      $("#myModal").modal("show");
-    }
-
-    function getCurrentLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function (position) {
-            var latLng = new google.maps.LatLng(
-              position.coords.latitude,
-              position.coords.longitude
-            );
-            map.setCenter(latLng);
-            map.setZoom(15);
-            marker.setPosition(latLng);
-            updateAddressFromMarker();
-          },
-          function (error) {
-            alert("Error obteniendo la dirección: " + error.message);
-          }
-        );
-      } else {
-        alert("La geolocalización no es soportada en este navegador.");
-      }
-    }
-  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkOE6tdxKR6yicdhzVF7109pAF_zMYzv4&libraries=places&callback=initMap"></script>
+  
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const radio3 = document.getElementById("radio3");
-      const otrosModal = new bootstrap.Modal(document.getElementById("otrosModal"));
-      const guardarBtn = document.getElementById("guardarBtn");
-      const otrosInputLabel = document.querySelector(".radio-button__label[for='radio3']");
+    
+</script>
 
-      radio3.addEventListener("click", function () {
-        $("#otrosModal").modal("show");
-      });
-
-
-      guardarBtn.addEventListener("click", function () {
-        const otrosInput = document.getElementById("otros-input").value;
-        otrosInputLabel.textContent = otrosInput;
-        otrosModal.hide();
-      });
-    });
-  </script>
-
-  <script>
-    document.getElementById('saveButton').addEventListener("click", function (e) {
-
-      // document.getElementById('saveButton').classList.add('disabled-button');
-      e.preventDefault();
-
-      // Obtén el token CSRF del formulario
-      let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
-      console.log(csrfToken);
-
-      let data = {
-        csrfmiddlewaretoken: csrfToken,
-        name: document.getElementById('name').value,
-        lastname: document.getElementById('lastname').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        addressInput: document.getElementById('addressInput').value,
-        latitude: document.getElementById('latitude').value,
-        longitude: document.getElementById('longitude').value,
-        houseNumber: document.getElementById('houseNumber').value,
-        text: document.getElementById('text').value,
-        telephoneNumber: document.getElementById('telephoneNumber').value,
-        radio2: document.getElementById('radio2').value
-      };
-
-      fetch('/register_user_API/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        body: JSON.stringify(data)
-      })
-        .then(response => response.json())
-        .then(data => {
-          // Handle the response data as needed
-          console.log(data);
-
-          if (data.status === 'success') {
-
-            window.location.href = "/";
-
-
-
-          } else {
-            document.getElementById("modalAlertsBody").innerText = data.message;
-            $("#modalAlerts").modal("show");
-
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    });
-  </script>
 </body>
 
 </html>

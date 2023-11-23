@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib.auth.hashers import make_password, check_password
 from .models import person, location, phoneNumbers, rol, user
 
 from django.views.decorators.csrf import csrf_exempt
@@ -52,7 +53,7 @@ def register_user_API(request):
             name=data['name'],
             lastname=data['lastname'],
             email=data['email'],
-            password=data['password']
+            password= make_password(data['password'])
         )
 
         location_instance = location.objects.create(

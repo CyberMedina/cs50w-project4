@@ -19,14 +19,22 @@
   <title>{% block tittle %}{% endblock %}</title>
 </head>
 
-<body>
+
+<body class="container-body">
+  <!-- Loader -->
+  <div id="loaderContainer" class="loader-container">
+    <div class="loader"></div>
+  </div>
+
+
+
   <!-- Start Header/Navigation -->
   <nav class="navbar custom-navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar"
     id="seccion1">
     <div class="container">
       <!-- Logo que se mostrará en pantallas grandes -->
       <a class="navbar-brand d-none d-md-block" href="">
-        <img src="{% static 'images/Logo-Velaroma-Sin-Fondo.webp' %}" width="100" height="100" alt="Logo">
+        <img src="{% static 'images/Logo-Velaroma-Sin-Fondo.webp' %}" width="80" height="80" alt="Logo">
       </a>
       <!-- Dropdown que se mostrará en pantallas pequeñas -->
       <a class="nav-link dropdown-toggle d-block d-md-none" href="#" id="userDropdown" role="button"
@@ -61,7 +69,6 @@
           <li><a class="nav-link" href="shop.html">Tienda</a></li>
           <li><a class="nav-link" href="about.html">Acerca</a></li>
           <li><a class="nav-link" href="services.html">Servicios</a></li>
-          <li><a class="nav-link" href="blog.html">Blog</a></li>
           <li><a class="nav-link" href="contact.html">Contactanos</a></li>
         </ul>
 
@@ -83,7 +90,6 @@
               {% endif %}
             </ul>
           </li>
-          <li><a class="nav-link" href="cart.html"><img src="{% static 'images/cart.svg' %}" alt="Cart"></a></li>
         </ul>
       </div>
     </div>
@@ -191,11 +197,11 @@
               <input type="password" id="passw" name="password" placeholder=" " required="">
               <label for="input" class="label">Contraseña</label>
               <div class="lostpass text-lg-end">
-                  <a class="text-lg-start" href="">¿Ha olvidado su
-                      contraseña?</a>
+                <a class="text-lg-start" href="">¿Ha olvidado su
+                  contraseña?</a>
               </div>
               <div class="underline"></div>
-          </div>
+            </div>
             <button class="btn btn-block" type="submit">Iniciar sesión</button>
             <p class="mt-2">¿No tienes una cuenta? <a href="{% url 'register_user' %}">Regístrate</a></p>
             <div class="container custom-container-o">
@@ -235,7 +241,30 @@
   </div>
 
   <script>
+    // Funcion para las animaciones del loader
+    window.addEventListener('load', function () {
+      document.getElementById('loaderContainer').style.display = 'none';
 
+      // Selecciona el body
+      var body = document.body;
+
+
+
+      // Elimina la clase "container-body"
+      body.classList.remove('container-body');
+
+      // También puedes eliminar el pseudo-elemento :before
+      var beforeElement = document.querySelector('body:before');
+      if (beforeElement) {
+        beforeElement.parentNode.removeChild(beforeElement);
+      }
+
+
+
+    });
+
+
+    // Abrir modal con url
     window.onload = function () {
       // Verificar si hay un parámetro en la URL indicando que se debe abrir el modal
       const urlParams = new URLSearchParams(window.location.search);
@@ -243,7 +272,7 @@
 
       // Si el parámetro está presente y tiene un valor específico, abrir el modal
       if (openModal === 'true') {
-        
+
         // Abrir el modal
         openLoginModal();
 
@@ -252,8 +281,8 @@
         window.history.replaceState({}, document.title, newURL);
 
       }
-  };
-
+    };
+    // Con esto abro el modal de inicio de sesión
     function openLoginModal() {
       var myModal = new bootstrap.Modal(document.getElementById('iniciosesion2'));
       myModal.show();

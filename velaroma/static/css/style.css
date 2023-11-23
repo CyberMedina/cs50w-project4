@@ -25,7 +25,7 @@
   display: none;
   place-items: center;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px #00000033;
   cursor: pointer;
 }
 
@@ -63,8 +63,7 @@ span{
 /* Media query */
 @media (min-width: 992px) {
   .custom-navbar {
-    margin-left: 5%;
-    margin-right: 5%;
+    padding: 15px 0 15px 0;
   }
 
   .product-section {
@@ -126,9 +125,14 @@ a.more {
 }
 
 .custom-navbar {
-  background: #f8f9fa !important;
+  background: #ffffff !important;
   padding-top: 20px;
   padding-bottom: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ajusta el valor según sea necesario */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1) !important;
+  
 }
 
 .custom-navbar .navbar-brand {
@@ -164,8 +168,8 @@ a.more {
 
 @media (min-width: 992px) {
   .custom-navbar .custom-navbar-nav li {
-    margin-left: 15px;
-    margin-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
@@ -177,6 +181,7 @@ a.more {
   -o-transition: .3s all ease;
   transition: .3s all ease;
   position: relative;
+
 }
 
 @media (min-width: 768px) {
@@ -237,8 +242,10 @@ a.more {
 }
 
 .hero {
-  background: #ffffff;
-  padding: calc(4rem - 30px) 0 0rem 0;
+  background: #f8f9fa;
+  margin: 5rem 0 3rem 0;
+  
+  
 }
 
 @media (min-width: 768px) {
@@ -249,7 +256,7 @@ a.more {
 
 @media (min-width: 992px) {
   .hero {
-    padding: calc(8rem - 30px) 0 8rem 0;
+    margin: 5rem 0 3rem 0;
   }
 }
 
@@ -315,7 +322,7 @@ a.more {
 @media (min-width: 1200px) {
   .hero .hero-img-wrap img {
     left: 200px;
-    top: -120px;
+    top: -150px;
     right: -100px;
   }
 }
@@ -1422,6 +1429,7 @@ button:hover {
 
 /* Inicio shopping cart  */
 .shopping-cart {
+  background-color: #ffffff;
   position: fixed;
   bottom: 80px;
   right: 10px;
@@ -1433,6 +1441,8 @@ button:hover {
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  z-index: 1000 !important; /* Ajusta el valor según sea necesario */
+  
 }
 
 .shopping-cart.active {
@@ -1506,10 +1516,12 @@ button:hover {
 /* Nuevo footer */
 /* Inicio sección pie de página */
 .pie-de-pagina {
-  background-color: #f8f9fa;
+  box-shadow: 0px 2px 5px rgba(0.1, 0, 0, 0) !important;
+  background-color: #FFFFFF;
   width: 100%;
 }
 .pie-de-pagina .grupo-1 {
+  box-shadow: 0px 2px 5px rgba(0.1, 0, 0, 0) !important;
   color: #000000 !important;
   width: 100%;
   max-width: 100%;
@@ -1590,10 +1602,11 @@ button:hover {
   color: #c88e5e;
 }
 .pie-de-pagina .grupo-2 {
-  background-color: #765827;
+  background-color: #FFFFFF;
   padding: 15px 10px;
   text-align: center;
-  color: #FFFFFF;
+  color: #000000;
+  text-decoration: dashed;
 }
 .pie-de-pagina .grupo-2 small {
   font-size: 15px;
@@ -1606,3 +1619,81 @@ button:hover {
     padding: 35px 0px;
   }
 }
+
+.container-body{
+  overflow: hidden; /* Evita que el contenido del body sea desplazable cuando está oscurecido */
+
+}
+
+.container-body:before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 100); /* Ajusta la opacidad según sea necesario */
+  z-index: 997; /* Asegura que el fondo oscuro esté por debajo del loader y la superposición */
+}
+
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según sea necesario */
+  z-index: 998; /* Asegura que la superposición esté por debajo del loader pero por encima del contenido principal */
+  display: none; /* Inicialmente oculta */
+}
+
+.loader-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999; /* Asegura que el loader esté en la parte superior */
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border: 5px solid rgb(255, 17, 0);
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: rot5 1s infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes rot5 {
+  0% {
+    transform: rotate(0);
+  }
+
+  50% {
+    transform: rotate(180deg);
+    border-top-color: rgb(139, 46, 46);
+    border-bottom-color: rgb(243, 92, 33);
+    border-right-color: transparent;
+    border-left-color: transparent;
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* End loading animation */
+
+/* Scroll bar styles */
+
+
+
+

@@ -671,3 +671,78 @@ button:hover {
   pointer-events: all;
   opacity: 0;
 }
+
+
+/* Start loader animation */
+
+.dark-background {
+  overflow: hidden; /* Evita que el contenido del body sea desplazable cuando está oscurecido */
+}
+
+body.dark-background::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según sea necesario */
+  z-index: 997; /* Asegura que el fondo oscuro esté por debajo del loader y la superposición */
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según sea necesario */
+  z-index: 998; /* Asegura que la superposición esté por debajo del loader pero por encima del contenido principal */
+  display: none; /* Inicialmente oculta */
+}
+
+.loader-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999; /* Asegura que el loader esté en la parte superior */
+  display: none; /* Inicialmente oculto */
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border: 5px solid rgb(255, 17, 0);
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: rot5 1s infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes rot5 {
+  0% {
+    transform: rotate(0);
+  }
+
+  50% {
+    transform: rotate(180deg);
+    border-top-color: rgb(139, 46, 46);
+    border-bottom-color: rgb(243, 92, 33);
+    border-right-color: transparent;
+    border-left-color: transparent;
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* End loading animation */
+
