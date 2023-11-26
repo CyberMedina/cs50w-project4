@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = form.querySelector("#password");
   const confirmPasswordInput = form.querySelector("#confirm-password");
   const signBtn = form.querySelector(".sign-btn");
-  // Obtén referencia al botón de saltar validaciones
-  const skipValidationBtn = document.querySelector(".skip-validation-btn");
+
 
 
   // Elementos para el correcto cambio de formulario
@@ -26,19 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordErrorTooltip = form.querySelector("#password-error");
   const confirmPasswordErrorTooltip = form.querySelector("#confirm-password-error");
 
-  // Agrega un oyente de evento al botón para saltar validaciones
-  skipValidationBtn.addEventListener("click", function () {
-    // Cambia a la otra vista directamente
-    main.classList.toggle("sign-up-mode");
+  // Obtener todos los campos de entrada
+  const inputs = form.querySelectorAll("input[required]");
 
-    // Habilita el botón de envío ya que hemos saltado las validaciones
-    signBtn.disabled = false;
-
-    // Puedes ocultar los mensajes de error aquí si lo deseas
-    hideTooltip(errorEmailTooltip);
-    hideTooltip(passwordErrorTooltip);
-    hideTooltip(confirmPasswordErrorTooltip);
-  });
 
   // Función para verificar si todos los campos de entrada están llenos
   function checkAllInputsFilled() {
@@ -77,6 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
       hideTooltip(errorEmailTooltip);
     }
     enableOrDisableSubmitButton();
+  });
+
+  // Agregar un evento de entrada a cada campo de entrada
+  inputs.forEach((input) => {
+    input.addEventListener("input", function () {
+      enableOrDisableSubmitButton();
+    });
   });
 
   // Función para manejar el evento de entrada para la contraseña
@@ -122,68 +118,109 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  toggle_btn.forEach((btn) => {
-    btn.addEventListener("click", () => {
-
-      loaderContainer.style.display = 'block';
-      body.classList.add('dark-background');
-
-
-      // Obtén el token CSRF del formulario
-      let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
-      console.log(csrfToken);
-
-      let data = {
-        csrfmiddlewaretoken: csrfToken,
-        email: document.getElementById('email').value,
-      };
-
-      fetch('/validation_register_API/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        body: JSON.stringify(data)
-      })
-        .then(response => response.json())
-        .then(data => {
-
-          loaderContainer.style.display = 'none';
-          // Handle the response data as needed
-          console.log(data);
-
-          if (data.status === 'success') {
-            main.classList.toggle("sign-up-mode");
-
-
-            // Al hacer clic al botón de siguiente este hace la función de moveslider y simula que ha sido tocado un bullet
-            moveSlider.call(bullets[1]);
-
-            loaderContainer.style.display = 'none';
-            body.classList.remove('dark-background');
 
 
 
-          } else {
 
-            document.getElementById("modalAlertsBody").innerText = data.message;
-            $("#modalAlerts").modal("show");
+  function btncontinue() {
 
-            loaderContainer.style.display = 'none';
-            body.classList.remove('dark-background');
+    loaderContainer.style.display = 'block';
+    body.classList.add('dark-background');
 
 
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
+   // Obtén el token CSRF del formulario
+   let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
+   console.log(csrfToken);
+
+   let data = {
+     csrfmiddlewaretoken: csrfToken,
+     name: document.getElementById('name').value,
+     lastname: document.getElementById('lastname').value,
+     email: document.getElementById('email').value,
+     password: document.getElementById('password').value
+   };
+
+   fetch('/validation_register_API/', {
+     method: 'POST',
+     headers: {
+       'Content-Type': 'application/json',
+       'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+     },
+     body: JSON.stringify(data)
+   })
+     .then(response => response.json())
+     .then(data => {
+       // Handle the response data as needed
+
+        loaderContainer.style.display = 'none';
+        // Handle the response data as needed
+        console.log(data);
+
+        if (data.status === 'success') {
+          main.classList.toggle("sign-up-mode");
+
+
+          // Al hacer clic al botón de siguiente este hace la función de moveslider y simula que ha sido tocado un bullet
+          moveSlider.call(bullets[1]);
 
           loaderContainer.style.display = 'none';
           body.classList.remove('dark-background');
-        });
+
+
+
+        } else {
+
+          var toast = new bootstrap.Toast(document.getElementById('toastStatus'))
+          // Selecciono el id de los componentes de mi toastStatus
+
+          titleToast.innerText = data.message
+
+
+
+          loaderContainer.style.display = 'none';
+          body.classList.remove('dark-background');
+          $('.toast').toast({ delay: 5000 }); // El toast se mostrará durante 5 segundos
+          $('.toast').toast('show');
+
+
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+
+        loaderContainer.style.display = 'none';
+        body.classList.remove('dark-background');
+      });
+
+  };
+
+  toggle_btn.forEach((btn) => {
+
+    btn.addEventListener("click", () => {
+      btncontinue();
     });
+
+
   });
+
+
+  document.getElementById("sign-in-form").addEventListener("keyup", function (event) {
+    // Número 13 es la tecla "Enter"
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      // Verifica si el botón está habilitado
+      if (!document.getElementById("sign-btn").disabled) {
+        // Llama a la función btncontinue
+        btncontinue();
+      }
+    }
+  });
+
+  function SendWithEnter(event) {
+    if (event.key === 'Enter') {
+      btncontinue();
+    }
+  }
 
   function moveSlider() {
     let register_user = this.dataset.value;
@@ -312,11 +349,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         } else {
-          document.getElementById("modalAlertsBody").innerText = data.message; // obtiene el modal
-          $("#modalAlerts").modal("show"); // Muestra el modal
-
           loaderContainer.style.display = 'none'; // Quitar la animación del loader
           body.classList.remove('dark-background');// Quitar lo oscuro del body
+
+          var toast = new bootstrap.Toast(document.getElementById('toastStatus'))
+          // Selecciono el id de los componentes de mi toastStatus
+          var titleToast = document.getElementById('titleToast');
+
+          titleToast.innerText = data.message
+
+          toast.show();
+
           document.getElementById('saveButton').classList.remove('disabled-button');// Quita el botón deshabilitado
 
         }
@@ -332,143 +375,113 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fin botón de "Continuar"
 });
 
-  // Inicio mapa
+// Inicio mapa
 
-  var map;
-  var marker;
-  var searchBox;
+var map;
+var marker;
+var searchBox;
 
-  function initMap() {
-    var location = new google.maps.LatLng(12.11501075424433, -86.2360456940407);
-    var mapOptions = {
-      center: location,
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true, // Desactiva la interfaz predeterminada del mapa
-      mapTypeControl: false, // Desactiva el control de tipos de mapa (Satélite, Mapa)
-    };
-    map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    marker = new google.maps.Marker({
-      position: location,
-      map: map,
-      draggable: true
-    });
+function initMap() {
+  var location = new google.maps.LatLng(12.11501075424433, -86.2360456940407);
+  var mapOptions = {
+    center: location,
+    zoom: 15,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true, // Desactiva la interfaz predeterminada del mapa
+    mapTypeControl: false, // Desactiva el control de tipos de mapa (Satélite, Mapa)
+  };
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    draggable: true
+  });
 
-    google.maps.event.addListener(marker, "dragend", function () {
+  google.maps.event.addListener(marker, "dragend", function () {
+    updateAddressFromMarker();
+  });
+
+  searchBox = new google.maps.places.SearchBox(document.getElementById("searchInput"));
+
+  searchBox.addListener("places_changed", function () {
+    var places = searchBox.getPlaces();
+    if (places.length === 0) return;
+
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function (place) {
+      if (!place.geometry) return;
+
+      if (place.geometry.viewport) {
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+
+      // Establecer la ubicación del marcador en la ubicación seleccionada del cuadro de búsqueda
+      marker.setPosition(place.geometry.location);
+      map.fitBounds(bounds);
       updateAddressFromMarker();
     });
+  });
 
-    searchBox = new google.maps.places.SearchBox(document.getElementById("searchInput"));
+  $("#getLocationButton").click(function () {
+    getCurrentLocation();
+  });
 
-    searchBox.addListener("places_changed", function () {
-      var places = searchBox.getPlaces();
-      if (places.length === 0) return;
+  $("#saveLocation").click(function () {
+    var address = $("#addressInput").val();
+    var latitude = marker.getPosition().lat();
+    var longitude = marker.getPosition().lng();
 
-      var bounds = new google.maps.LatLngBounds();
-      places.forEach(function (place) {
-        if (!place.geometry) return;
+    // Set the values of hidden inputs
+    $("#latitude").val(latitude);
+    $("#longitude").val(longitude);
 
-        if (place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
+    alert("Address saved: " + address);
+    $("#myModal").modal("hide");
+  });
+}
 
-        // Establecer la ubicación del marcador en la ubicación seleccionada del cuadro de búsqueda
-        marker.setPosition(place.geometry.location);
-        map.fitBounds(bounds);
-        updateAddressFromMarker();
-      });
-    });
-
-    $("#getLocationButton").click(function () {
-      getCurrentLocation();
-    });
-
-    $("#saveLocation").click(function () {
-      var address = $("#addressInput").val();
-      var latitude = marker.getPosition().lat();
-      var longitude = marker.getPosition().lng();
-
-      // Set the values of hidden inputs
-      $("#latitude").val(latitude);
-      $("#longitude").val(longitude);
-
-      alert("Address saved: " + address);
-      $("#myModal").modal("hide");
-    });
-  }
-
-  function updateAddressFromMarker() {
-    var latLng = marker.getPosition();
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ location: latLng }, function (results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-        if (results[0]) {
-          $("#addressInput").val(results[0].formatted_address);
-          $("#selectedLocationLabel").text(results[0].formatted_address);
-        }
+function updateAddressFromMarker() {
+  var latLng = marker.getPosition();
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: latLng }, function (results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      if (results[0]) {
+        $("#addressInput").val(results[0].formatted_address);
+        $("#selectedLocationLabel").text(results[0].formatted_address);
       }
-    });
-  }
-
-
-
-  function getCurrentLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          var latLng = new google.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          map.setCenter(latLng);
-          map.setZoom(15);
-          marker.setPosition(latLng);
-          updateAddressFromMarker();
-        },
-        function (error) {
-          alert("Error obteniendo la dirección: " + error.message);
-        }
-      );
-    } else {
-      alert("La geolocalización no es soportada en este navegador.");
     }
+  });
+}
 
 
 
-
-
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const radio3 = document.getElementById("radio3");
-      const otrosModal = new bootstrap.Modal(document.getElementById("otrosModal"));
-      const guardarBtn = document.getElementById("guardarBtn");
-      const otrosInputLabel = document.querySelector(".radio-button__label[for='radio3']");
-
-      radio3.addEventListener("click", function () {
-        $("#otrosModal").modal("show");
-      });
-
-
-      guardarBtn.addEventListener("click", function () {
-        const otrosInput = document.getElementById("otros-input").value;
-        otrosInputLabel.textContent = otrosInput;
-        otrosModal.hide();
-      });
-    });
-
-
-
-    // Fin de mapa
-
+function getCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var latLng = new google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        map.setCenter(latLng);
+        map.setZoom(15);
+        marker.setPosition(latLng);
+        updateAddressFromMarker();
+      },
+      function (error) {
+        alert("Error obteniendo la dirección: " + error.message);
+      }
+    );
+  } else {
+    alert("La geolocalización no es soportada en este navegador.");
   }
 
-  // Abrir modal para poder visualizar el mapa en el registro
-  function openModal() {
-    $("#myModal").modal("show");
-  }
+
+
+
+
 
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -488,6 +501,36 @@ document.addEventListener("DOMContentLoaded", function () {
       otrosModal.hide();
     });
   });
+
+
+
+  // Fin de mapa
+
+}
+
+// Abrir modal para poder visualizar el mapa en el registro
+function openModal() {
+  $("#myModal").modal("show");
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const radio3 = document.getElementById("radio3");
+  const otrosModal = new bootstrap.Modal(document.getElementById("otrosModal"));
+  const guardarBtn = document.getElementById("guardarBtn");
+  const otrosInputLabel = document.querySelector(".radio-button__label[for='radio3']");
+
+  radio3.addEventListener("click", function () {
+    $("#otrosModal").modal("show");
+  });
+
+
+  guardarBtn.addEventListener("click", function () {
+    const otrosInput = document.getElementById("otros-input").value;
+    otrosInputLabel.textContent = otrosInput;
+    otrosModal.hide();
+  });
+});
 
 
 

@@ -46,9 +46,10 @@
 
       <ul class="dropdown-menu" aria-labelledby="userDropdown">
         <!-- Contenido del menú desplegable -->
-        {% if g.user_id %}
+        {% if user.is_authenticated %}
+        <li><a class="dropdown-item" href="#">{{ user.first_name }}</a></li>
         <li><a class="dropdown-item" href="#">Configuración</a></li>
-        <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+        <li><a class="dropdown-item" href="logout">Cerrar Sesión</a></li>
         {% else %}
         <li><a class="dropdown-item" onclick="openLoginModal()">Iniciar sesión</a></li>
         <li><a class="dropdown-item" href="{% url 'register_user' %}">Registrarse</a></li>
@@ -79,11 +80,12 @@
               aria-expanded="false">
               <img src="{% static 'images/user.svg' %}" alt="User">
             </a>
-            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <!-- Contenido del menú desplegable -->
-              {% if g.user_id %}
+              {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="#">{{ user.first_name }}</a></li>
               <li><a class="dropdown-item" href="#">Configuración</a></li>
-              <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+              <li><a class="dropdown-item" href="logout">Cerrar Sesión</a></li>
               {% else %}
               <li><a class="dropdown-item" onclick="openLoginModal()" style="cursor: pointer;">Iniciar sesión</a></li>
               <li><a class="dropdown-item" href="{% url 'register_user' %}">Registrarse</a></li>
@@ -91,6 +93,7 @@
             </ul>
           </li>
         </ul>
+
       </div>
     </div>
   </nav>
@@ -216,7 +219,7 @@
               </div>
             </div>
             <div class="custom-button">
-              <button class="button">
+              <a class="buttonGoogle" id="btnRegisterGoogle" href="{% url 'social:begin' 'google-oauth2' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
                   <path fill="#4285F4"
                     d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027">
@@ -232,7 +235,7 @@
                   </path>
                 </svg>
                 Iniciar sesión con Google
-              </button>
+              </a>
             </div>
           </form>
         </div>

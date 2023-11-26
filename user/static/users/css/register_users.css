@@ -630,7 +630,7 @@ textarea:valid:required{
 
 }
 
-button {
+.buttonGoogle {
   max-width: 100%;
   display: flex;
   padding: 0.5rem 2rem;
@@ -650,11 +650,11 @@ button {
   transition: all .6s ease;
 }
 
-.button svg {
+.buttonGoogle svg {
   height: 24px;
 }
 
-button:hover {
+.buttonGoogle:hover {
   transform: scale(1.02);
 }
 
@@ -746,3 +746,46 @@ body.dark-background::before {
 
 /* End loading animation */
 
+/* Star toast error */
+.error {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  max-width: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background: #EF665B;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px -3px #111;
+}
+
+.error__icon {
+  width: 20px;
+  height: 20px;
+  transform: translateY(-2px);
+  margin-right: 8px;
+}
+
+.error__icon path {
+  fill: #fff;
+}
+
+.error__title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+}
+
+.error__close {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.error__close path {
+  fill: #fff;
+}
+
+/* End toast  */

@@ -12,7 +12,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  
+
   <style>
     #map {
       height: 300px;
@@ -29,6 +29,7 @@
 </head>
 
 <body>
+
   <!-- Loader -->
   <div id="loaderContainer" class="loader-container">
     <div class="loader"></div>
@@ -54,42 +55,40 @@
 
             <div class="actual-form registrarse-actual-form">
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="off" name="name" id="name" required />
+                <input type="text" class="input-field" autocomplete="off" name="name" id="name" maxlength="30" required />
                 <label>Nombre(s)</label>
               </div>
 
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="off" name="lastname" id="lastname" required />
+                <input type="text" class="input-field" autocomplete="off" name="lastname" id="lastname" maxlength="30" required />
                 <label>Apellidos(s)</label>
               </div>
 
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="nope" name="email" id="email" required />
+                <input type="text" class="input-field" autocomplete="new-email" name="email" id="email" maxlength="255" required />
                 <label>Correo electrónico</label>
                 <div class="custom-tooltip" id="error-email-tooltip"></div>
               </div>
 
 
               <div class="input-wrap">
-                <input type="password" class="input-field" autocomplete="off" id="password" name="password" required />
+                <input role="presentation" type="password" class="input-field" autocomplete="new-password" id="password" name="password" required />
                 <label>Contraseña</label>
                 <div class="custom-tooltip" id="password-error"></div>
               </div>
 
 
               <div class="input-wrap">
-                <input type="password" class="input-field" autocomplete="off" id="confirm-password" disabled required />
+                <input type="password" class="input-field" autocomplete="off" id="confirm-password" disabled required onkeyup="SendWithEnter(event)" />
                 <label>Repetir contraseña</label>
                 <div class="custom-tooltip" id="confirm-password-error"></div>
               </div>
 
-              <!-- Agrega este botón en el lugar adecuado de tu HTML -->
-              <button class="skip-validation-btn">Saltar Validaciones</button>
 
-              <button type="button" class="sign-btn toggle" disabled>Continuar</button>
+              <button type="button" class="sign-btn toggle" id="sign-btn" disabled>Continuar</button>
 
               <div class="input-wrap input-wrap-google">
-                <button class="button">
+                <a class="buttonGoogle" id="btnRegisterGoogle" href="{% url 'social:begin' 'google-oauth2' %}">
                   <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
                     <path fill="#4285F4"
                       d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027">
@@ -105,12 +104,19 @@
                     </path>
                   </svg>
                   Registrarme con Google
-                </button>
+                </a>
               </div>
 
 
               <script>
 
+                document.getElementById('btnRegisterGoogle').addEventListener('click', function(e){
+
+                  e.preventDefault();
+
+                  window.location.href = '{% url 'social:begin' 'google-oauth2' %}'
+                  
+                });
               </script>
 
 
@@ -196,7 +202,8 @@
                 </div>
               </div>
 
-              <input type="submit" value="Guardar ahora" class="sign-btn" id="saveButton" />
+              <input type="submit" value="Guardar ahora" class="sign-btn btn" id="saveButton" />
+              <input type="submit" value="Omitir" class="sign-btn btn" id="saveButton" />
 
               <p class="text">
                 Forgotten your password or you login datails?
@@ -303,19 +310,50 @@
       </div>
     </div>
     </div>
-
   </main>
+
+   <!-- Error toast -->
+   <div class="toast" style="top: 1rem; right: 1rem; position: fixed; z-index: 9999;">
+    <div class="error">
+      <div class="error__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none">
+          <path fill="#393a37"
+            d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z">
+          </path>
+        </svg>
+      </div>
+      <div class="error__title" id="titleToast"></div>
+      <button type="button" class="error__close ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20">
+          <path fill="#393a37"
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+
+   
+
+
+
+
 
 
   <!-- Javascript file -->
   <script src="{% static 'users/js/register_user.js' %}"></script>
 
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkOE6tdxKR6yicdhzVF7109pAF_zMYzv4&libraries=places&callback=initMap"></script>
-  
+
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkOE6tdxKR6yicdhzVF7109pAF_zMYzv4&libraries=places&callback=initMap"></script>
+
 
   <script>
-    
-</script>
+
+  </script>
+
+
 
 </body>
 

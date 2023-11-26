@@ -1338,16 +1338,22 @@ input:-webkit-autofill {
 /* Inicio de segmento para iniciar sesion con google */
 
 .custom-button {
-  margin-top: 3%;
+
   display: flex;
   justify-content: center;
 }
 
-button {
+.input-wrap-google{
+  margin-top: -1rem !important;
+
+
+}
+
+.buttonGoogle {
   max-width: 100%;
   display: flex;
-  padding: 0.5rem 1.4rem;
-  font-size: 0.875rem;
+  padding: 0.5rem 2rem;
+  font-size: 0.750rem;
   line-height: 1.25rem;
   font-weight: 700;
   text-align: center;
@@ -1357,19 +1363,20 @@ button {
   border-radius: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.25);
   gap: 0.75rem;
-  color: rgb(65, 63, 63);
+  color: rgb(65, 63, 63) !important;
   background-color: #fff;
   cursor: pointer;
   transition: all .6s ease;
 }
 
-.button svg {
+.buttonGoogle svg {
   height: 24px;
 }
 
-button:hover {
+.buttonGoogle:hover {
   transform: scale(1.02);
 }
+
 
 
 /* FIN de segmento para iniciar sesion con google */
