@@ -108,10 +108,48 @@
 
 
   <!-- Start shopping Cart -->
-  <div class="shopping-cart" data-product-count="0">
+  <div class="shopping-cart" id="shopping-cart" data-product-count="0">
     <span><img src="{% static 'images/cart.png' %}" alt="" width="25px" height="25px"></span>
   </div>
   <!-- Ending shopping Cart -->
+
+  <!-- start off canvas to show cart items -->
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasShoppingList" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">Carrito de compras</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body"></div>
+  </div>
+
+  <script>
+
+    document.getElementById('shopping-cart').addEventListener("click", function () {
+      var offcanvasBody = document.querySelector('.offcanvas .offcanvas-body');
+
+      var offcanvasElement = document.getElementById('offCanvasShoppingList');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement);
+
+      if (offcanvasBody.innerHTML.trim() === '') {
+        offcanvasBody.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><p>El carrito aún está vacío</p></div>';
+      } else {
+        // El offcanvas no está vacío, no hacer nada
+      }
+
+      bsOffcanvas.show();
+
+    });
+
+
+
+
+
+
+
+  </script>
+
+  <!-- end off canvas to show cart items -->
 
   <!-- Start scroll bar -->
   <div id="progress">
