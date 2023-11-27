@@ -128,29 +128,29 @@ document.addEventListener("DOMContentLoaded", function () {
     body.classList.add('dark-background');
 
 
-   // Obtén el token CSRF del formulario
-   let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
-   console.log(csrfToken);
+    // Obtén el token CSRF del formulario
+    let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
+    console.log(csrfToken);
 
-   let data = {
-     csrfmiddlewaretoken: csrfToken,
-     name: document.getElementById('name').value,
-     lastname: document.getElementById('lastname').value,
-     email: document.getElementById('email').value,
-     password: document.getElementById('password').value
-   };
+    let data = {
+      csrfmiddlewaretoken: csrfToken,
+      name: document.getElementById('name').value,
+      lastname: document.getElementById('lastname').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value
+    };
 
-   fetch('/validation_register_API/', {
-     method: 'POST',
-     headers: {
-       'Content-Type': 'application/json',
-       'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-     },
-     body: JSON.stringify(data)
-   })
-     .then(response => response.json())
-     .then(data => {
-       // Handle the response data as needed
+    fetch('/validation_register_API/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data as needed
 
         loaderContainer.style.display = 'none';
         // Handle the response data as needed
@@ -401,27 +401,21 @@ function initMap() {
     updateAddressFromMarker();
   });
 
-  searchBox = new google.maps.places.SearchBox(document.getElementById("searchInput"));
+  // Crea la caja de búsqueda con restricciones de país
+  var input = document.getElementById("searchInput");
+  var options = {
+    componentRestrictions: { country: "ni" }
+  };
+  var autocomplete = new google.maps.places.Autocomplete(input, options);
 
-  searchBox.addListener("places_changed", function () {
-    var places = searchBox.getPlaces();
-    if (places.length === 0) return;
+  autocomplete.addListener("place_changed", function () {
+    var place = autocomplete.getPlace();
+    if (!place.geometry) return;
 
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function (place) {
-      if (!place.geometry) return;
-
-      if (place.geometry.viewport) {
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-
-      // Establecer la ubicación del marcador en la ubicación seleccionada del cuadro de búsqueda
-      marker.setPosition(place.geometry.location);
-      map.fitBounds(bounds);
-      updateAddressFromMarker();
-    });
+    // Establecer la ubicación del marcador en la ubicación seleccionada del cuadro de búsqueda
+    marker.setPosition(place.geometry.location);
+    map.fitBounds(place.geometry.viewport || place.geometry.location);
+    updateAddressFromMarker();
   });
 
   $("#getLocationButton").click(function () {

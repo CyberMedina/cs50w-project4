@@ -5,6 +5,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("register_user/", views.register_user, name="register_user"),
+    path("register_userG/", views.register_userG, name="register_userG"),
     path("register_user_API/", views.register_user_API, name="register_user_API"),
     path("validation_register_API/", views.validation_register_API, name="validation_register_API"),
     path('login/', views.login, name='login'),

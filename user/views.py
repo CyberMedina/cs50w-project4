@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from .models import StaffLocation, NoStaffLocation
+import user
+from .models import StaffLocation, NoStaffLocation, CustomUser
+from django.contrib.auth import logout
+from social_django.models import UserSocialAuth
 
 
 from django.views.decorators.csrf import csrf_exempt
@@ -12,6 +15,20 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Create your views here.
+
+
+def register_userG(request):
+
+    if request.user.is_authenticated and request.user.is_first_time_Google:
+
+        request.user.is_first_time_Google = False
+        request.user.save()
+
+        return render(request, 'users/register_userG.html')
+    
+    else:
+        return redirect('/')
+
 
 
 def register_user(request):
@@ -94,5 +111,25 @@ def register_user_API(request):
 
 def login(request):
     return JsonResponse({'status': 'success', 'message' : 'Ha iniciado sesión!'})
+
+
+def register_by_access_token(request, backend):
+    # backend es el nombre del proveedor de autenticación social, en este caso 'google'
+    token = request.POST.get('access_token')
+    try:
+        # registra al usuario
+        user = backend.do_auth(token)
+    except Exception as e:
+        return JsonResponse({"error": str(e)})
+
+    if user and user.is_active:
+        # si el usuario ya existe, no inicies sesión
+        logout(request)
+        return JsonResponse({"status": 'Usuario ya registrado.'}, status=400)
+
+    # si es un nuevo usuario, guarda los datos pero no inicies sesión
+    UserSocialAuth.objects.create(user=user, provider=backend.name, uid=user.email)
+    logout(request)
+    return JsonResponse({"status": 'Usuario registrado exitosamente.'})
 
 

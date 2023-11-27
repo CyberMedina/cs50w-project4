@@ -1,11 +1,18 @@
 from django.db import models
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
+
+
+class CustomUser(AbstractUser):
+    is_first_time_Google = models.BooleanField(default=False)
+
+
+
 
 
 
 class BaseLocation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     adress_input = models.CharField(max_length=255, blank=False)
     direction_Name = models.CharField(max_length=15, blank=False)
     house_Number = models.CharField(max_length=50, blank=True)
