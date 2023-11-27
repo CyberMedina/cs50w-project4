@@ -26,8 +26,14 @@ def register_userG(request):
 
         return render(request, 'users/register_userG.html')
     
+    if request.user.is_authenticated:
+
+        return render(request, 'users/register_userG.html')
+    
     else:
         return redirect('/')
+    
+
 
 
 
@@ -40,11 +46,11 @@ def validation_register_API(request):
 
         print(data)
 
-        if User.objects.filter(email=data['email']).exists():
+        if CustomUser.objects.filter(email=data['email']).exists():
             return JsonResponse({'status': 'error', 'message': 'El correo electrónico ya está registrado!'})
         
 
-        user_instance = User.objects.create_user(
+        user_instance = CustomUser.objects.create_user(
             
             username = data['email'],
             email= data['email'],
