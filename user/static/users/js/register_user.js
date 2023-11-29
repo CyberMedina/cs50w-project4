@@ -304,33 +304,34 @@ document.addEventListener("DOMContentLoaded", function () {
     loaderContainer.style.display = 'block'; // Muestra la animación del loader
     body.classList.add('dark-background'); // Pone oscuro el body con el css dark-background
 
+
+    // Obtiene el valor del radio button seleccionado
+    let selectedOption = document.querySelector('input[name="radio-group"]:checked');
+    let selectedText = selectedOption ? document.querySelector(`label[for="${selectedOption.id}"]`).textContent.trim() : null;
+
     document.getElementById('saveButton').classList.add('disabled-button'); // Pone el botón desactivado
     e.preventDefault();
 
     // Obtén el token CSRF del formulario
-    let csrfToken = document.getElementById('sign-in-form').querySelector('[name=csrfmiddlewaretoken]').value;
+    let csrfToken = document.getElementById('sign-up-form').querySelector('[name=csrfmiddlewaretoken]').value;
     console.log(csrfToken);
 
     let data = {
       csrfmiddlewaretoken: csrfToken,
-      name: document.getElementById('name').value,
-      lastname: document.getElementById('lastname').value,
-      email: document.getElementById('email').value,
-      password: document.getElementById('password').value,
       addressInput: document.getElementById('addressInput').value,
       latitude: document.getElementById('latitude').value,
       longitude: document.getElementById('longitude').value,
       houseNumber: document.getElementById('houseNumber').value,
       text: document.getElementById('text').value,
       telephoneNumber: document.getElementById('telephoneNumber').value,
-      radio2: document.getElementById('radio2').value
+      selectedRadioButton: selectedText,
     };
 
-    fetch('/register_user_API/', {
+    fetch('/register_location_API/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        'X-CSRFToken': csrfToken
       },
       body: JSON.stringify(data)
     })

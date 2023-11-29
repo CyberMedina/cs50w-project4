@@ -1,12 +1,13 @@
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login as auth_login
 import user
 from .models import StaffLocation, NoStaffLocation, CustomUser
 from django.contrib.auth import logout
+from django.contrib.auth.views import LogoutView
 from social_django.models import UserSocialAuth
 
 
@@ -17,21 +18,28 @@ import json
 # Create your views here.
 
 
+
+# Vista para redirigir cuando el usuario se autentica por Google
 def register_userG(request):
 
+    # Si el usuario está autenticado y es la primera vez que se autentica por Google
     if request.user.is_authenticated and request.user.is_first_time_Google:
 
+        # Se cambia el estado de is_first_time_Google a False
         request.user.is_first_time_Google = False
         request.user.save()
 
-        return render(request, 'users/register_userG.html')
-    
-    if request.user.is_authenticated:
 
         return render(request, 'users/register_userG.html')
     
+    # Si el usuario no es su primera vez que se autentica por Google simplemente entra a la página principal
     else:
         return redirect('/')
+    
+
+@login_required
+def register_user_location(request):
+     return render(request, 'users/register_userG.html')
     
 
 
@@ -50,7 +58,7 @@ def validation_register_API(request):
             return JsonResponse({'status': 'error', 'message': 'El correo electrónico ya está registrado!'})
         
 
-        user_instance = CustomUser.objects.create_user(
+        CustomUser.objects.create_user(
             
             username = data['email'],
             email= data['email'],
@@ -60,8 +68,9 @@ def validation_register_API(request):
         )
 
         user = authenticate(username=data['email'], password=data['password'])
+        print(user)
         if user is not None:
-            login(request)
+            auth_login(request, user)
 
             return JsonResponse({'status': 'success', 'message' : 'Ha iniciado sesión!'})
 
@@ -116,7 +125,31 @@ def register_user_API(request):
     return JsonResponse({'status': 'error'})
 
 def login(request):
-    return JsonResponse({'status': 'success', 'message' : 'Ha iniciado sesión!'})
+
+    if request.method == 'POST':
+
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user_social_auth = UserSocialAuth.objects.filter(uid=email).first()
+
+
+        if user_social_auth is None:
+            user = authenticate(request, username=email, password=password)
+
+            if user is not None:
+                auth_login(request, user)
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Usuario o contraseña incorrectos'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Usted ha sido registrado por Google, por favor autentiquese con Google'})
+
+        
+
+
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/') + '?openModal=true')
 
 
 def register_by_access_token(request, backend):
@@ -137,5 +170,30 @@ def register_by_access_token(request, backend):
     UserSocialAuth.objects.create(user=user, provider=backend.name, uid=user.email)
     logout(request)
     return JsonResponse({"status": 'Usuario registrado exitosamente.'})
+
+@csrf_exempt
+def register_location_API(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(data)
+        user = request.user
+        if user.is_authenticated:
+            location = NoStaffLocation(
+                user=user,
+                adress_input=data['addressInput'],
+                direction_Name=data['selectedRadioButton'],
+                house_Number=data['houseNumber'],
+                telephone_Number=data['telephoneNumber'],
+                latitude=data['latitude'],
+                longitude=data['longitude'],
+                delivery_Instructions=data['text']
+            )
+            location.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'error': 'Usuario no autenticado'}, status=401)
+
+
+
 
 

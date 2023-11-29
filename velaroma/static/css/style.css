@@ -11,6 +11,78 @@
 
 }
 
+.container-body{
+  overflow: hidden; /* Evita que el contenido del body sea desplazable cuando está oscurecido */
+
+}
+
+.container-body:before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según sea necesario */
+  z-index: 10001 !important; /* Asegura que el fondo oscuro esté por debajo del loader y la superposición */
+}
+
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según sea necesario */
+  z-index: 10010; /* Asegura que la superposición esté por debajo del loader pero por encima del contenido principal */
+  display: none; /* Inicialmente oculta */
+}
+
+.loader-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10010; /* Asegura que el loader esté en la parte superior */
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border: 5px solid rgb(255, 17, 0);
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: rot5 1s infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes rot5 {
+  0% {
+    transform: rotate(0);
+  }
+
+  50% {
+    transform: rotate(180deg);
+    border-top-color: rgb(139, 46, 46);
+    border-bottom-color: rgb(243, 92, 33);
+    border-right-color: transparent;
+    border-left-color: transparent;
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* End loading animation */
+
 .container {
   max-width: 100%;
 }
@@ -19,7 +91,7 @@
 #progress {
   position: fixed;
   bottom: 20px;
-  right: 10px;
+  right: 25px;
   height: 45px;
   width: 45px;
   display: none;
@@ -41,6 +113,18 @@
   color: #001a2e;
 }
 /* End scroll bar */
+
+/* start search bar */
+
+@media (max-width: 1200px) {
+  .navbar .input-group {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+/* end search bar */
+
 
 body {
   font-family: "Inter", sans-serif;
@@ -184,7 +268,7 @@ a.more {
 
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .custom-navbar .custom-navbar-nav li a:before {
     content: "";
     position: absolute;
@@ -860,7 +944,7 @@ a.more {
 }
 
 .before-footer-section {
-  padding: 7rem 0 12rem 0 !important;
+  padding: 1rem 0 12rem 0 !important;
 }
 
 .blog-section,
@@ -1439,7 +1523,7 @@ input:-webkit-autofill {
   background-color: #ffffff;
   position: fixed;
   bottom: 80px;
-  right: 10px;
+  right: 25px;
   height: 45px;
   width: 45px;
   display: flex;
@@ -1627,79 +1711,73 @@ input:-webkit-autofill {
   }
 }
 
-.container-body{
-  overflow: hidden; /* Evita que el contenido del body sea desplazable cuando está oscurecido */
 
-}
-
-.container-body:before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 100); /* Ajusta la opacidad según sea necesario */
-  z-index: 997; /* Asegura que el fondo oscuro esté por debajo del loader y la superposición */
-}
-
-
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según sea necesario */
-  z-index: 998; /* Asegura que la superposición esté por debajo del loader pero por encima del contenido principal */
-  display: none; /* Inicialmente oculta */
-}
-
-.loader-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 999; /* Asegura que el loader esté en la parte superior */
-}
-
-.loader {
-  width: 50px;
-  height: 50px;
-  display: inline-block;
-  border: 5px solid rgb(255, 17, 0);
-  border-radius: 50%;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  animation: rot5 1s infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-@keyframes rot5 {
-  0% {
-    transform: rotate(0);
-  }
-
-  50% {
-    transform: rotate(180deg);
-    border-top-color: rgb(139, 46, 46);
-    border-bottom-color: rgb(243, 92, 33);
-    border-right-color: transparent;
-    border-left-color: transparent;
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* End loading animation */
 
 /* Scroll bar styles */
+
+/* Start toast error */
+.error {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  max-width: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background: #EF665B;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px -3px #111;
+}
+
+.error__icon {
+  width: 20px;
+  transform: translateY(-2px);
+  margin-right: 10px;
+}
+
+.error__icon path {
+  fill: #fff;
+}
+
+.error__title {
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+}
+
+.error__close {
+  width: 20px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.error__close path {
+  fill: #fff;
+}
+
+/* End toast  */
+
+/* Estilos para Webkit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* Ancho del scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ff7373; /* Color del thumb (la parte que puedes arrastrar) */
+  border-radius: 50px; /* Bordes redondeados del thumb */
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ff5454; /* Color del thumb (la parte que puedes arrastrar) */
+  border-radius: 50px; /* Bordes redondeados del thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Color de fondo del scrollbar */
+}
+
+
 
 
 

@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'home',
     'user',
+    'shop',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -155,7 +156,6 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = 'user.CustomUser'
 
 LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'home'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'register_userG'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '13617804765-vpbng7aks3perb29heikgc49a0vbob05.apps.googleusercontent.com'

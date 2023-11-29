@@ -29,15 +29,15 @@
 
 
   <!-- Start Header/Navigation -->
-  <nav class="navbar custom-navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar"
+  <nav class="navbar custom-navbar navbar-expand-xl navbar-dark bg-dark" arial-label="Furni navigation bar"
     id="seccion1">
     <div class="container">
       <!-- Logo que se mostrará en pantallas grandes -->
-      <a class="navbar-brand d-none d-md-block" href="">
+      <a class="navbar-brand d-none d-xl-block" href="">
         <img src="{% static 'images/Logo-Velaroma-Sin-Fondo.webp' %}" width="80" height="80" alt="Logo">
       </a>
       <!-- Dropdown que se mostrará en pantallas pequeñas -->
-      <a class="nav-link dropdown-toggle d-block d-md-none" href="#" id="userDropdown" role="button"
+      <a class="nav-link dropdown-toggle d-block d-xl-none" href="#" id="userDropdown" role="button"
         data-bs-toggle="dropdown" aria-expanded="false">
         <img src="{% static 'images/user.svg' %}" alt="User">
       </a>
@@ -48,7 +48,7 @@
         <!-- Contenido del menú desplegable -->
         {% if user.is_authenticated %}
         <li><a class="dropdown-item" href="#">{{ user.first_name }}</a></li>
-        <li><a class="dropdown-item" href="#">Configuración</a></li>
+        <li><a class="dropdown-item" href="#">Mis ubicaciones</a></li>
         <li><a class="dropdown-item" href="logout">Cerrar Sesión</a></li>
         {% else %}
         <li><a class="dropdown-item" onclick="openLoginModal()">Iniciar sesión</a></li>
@@ -62,12 +62,59 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
+      {% block searchbar %}
+      <div class="input-group mb-3 mb-lg-0  w-100 w-lg-auto">
+        <input type="text" class="form-control" placeholder="¿Qué buscas?" aria-label="Search"
+          aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+          <img src="{% static 'images/search.png' %}" alt="search.png">
+        </button>
+      </div>
+      {% endblock %}
+
+      <style>
+        @media (min-width: 1200px) {
+          .navbar .input-group {
+            margin: 0 2rem 0 2rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+
+          .input-group {
+            margin: 1.5rem 0rem 0rem 0rem !important;
+          }
+
+        }
+
+        .input-group {
+          margin: 0 5rem 0 5rem;
+        }
+
+        #button-addon2 {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 40px;
+          /* Ajusta el ancho del botón */
+        }
+
+        #button-addon2 img {
+          width: 20px;
+          /* Ajusta el ancho del icono */
+          height: 20px;
+          /* Ajusta la altura del icono */
+        }
+      </style>
+
       <div class="collapse navbar-collapse" id="navbarsFurni">
         <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="">Inicio</a>
+          <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'home' %}">Inicio</a>
           </li>
-          <li><a class="nav-link" href="shop.html">Tienda</a></li>
+          <li class="nav-item {% if request.resolver_match.url_name == 'shop' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'shop' %}">Tienda</a>
+          </li>
           <li><a class="nav-link" href="about.html">Acerca</a></li>
           <li><a class="nav-link" href="services.html">Servicios</a></li>
           <li><a class="nav-link" href="contact.html">Contactanos</a></li>
@@ -75,7 +122,7 @@
 
         <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
           <!-- Dropdown que se mostrará en pantallas grandes -->
-          <li class="nav-item dropdown d-none d-md-block">
+          <li class="nav-item dropdown d-none d-xl-block">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               <img src="{% static 'images/user.svg' %}" alt="User">
@@ -84,8 +131,8 @@
               <!-- Contenido del menú desplegable -->
               {% if user.is_authenticated %}
               <li><a class="dropdown-item" href="#">{{ user.first_name }}</a></li>
-              <li><a class="dropdown-item" href="#">Configuración</a></li>
-              <li><a class="dropdown-item" href="logout">Cerrar Sesión</a></li>
+              <li><a class="dropdown-item" href="#">Mis ubicaciones</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
               {% else %}
               <li><a class="dropdown-item" onclick="openLoginModal()" style="cursor: pointer;">Iniciar sesión</a></li>
               <li><a class="dropdown-item" href="{% url 'register_user' %}">Registrarse</a></li>
@@ -93,7 +140,6 @@
             </ul>
           </li>
         </ul>
-
       </div>
     </div>
   </nav>
@@ -224,13 +270,14 @@
           <div class="loginlogo text-center">
             <img src="{% static 'images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="">
           </div>
-          <form class="text-center custom-form" action="/login_usuario2" method="POST">
+          <form class="text-center custom-form" id="formLogin" action="" method="POST">
+            {% csrf_token %}
             <h5 class="TittleLogin">Inicio de <span>sesión</span></h5>
             <div class="custom-paragraph">
               <p>Por favor introduzca sus datos a continuación: </p>
             </div>
             <div class="input-container">
-              <input type="email" id="email" placeholder=" " required="">
+              <input type="email" id="email" name="email" placeholder=" " required="">
               <label for="input" class="label">Correo electrónico</label>
               <div class="underline"></div>
             </div>
@@ -238,12 +285,12 @@
               <input type="password" id="passw" name="password" placeholder=" " required="">
               <label for="input" class="label">Contraseña</label>
               <div class="lostpass text-lg-end">
-                <a class="text-lg-start" href="">¿Ha olvidado su
+                <a class="text-lg-start" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">¿Ha olvidado su
                   contraseña?</a>
               </div>
               <div class="underline"></div>
             </div>
-            <button class="btn btn-block" type="submit">Iniciar sesión</button>
+            <button class="btn btn-block" type="submit" id="btnLogin">Iniciar sesión</button>
             <p class="mt-2">¿No tienes una cuenta? <a href="{% url 'register_user' %}">Regístrate</a></p>
             <div class="container custom-container-o">
               <div class="row custom-row">
@@ -281,7 +328,35 @@
     </div>
   </div>
 
+  <!-- Start error toast -->
+  <div class="toast" id="toastStatusError" style="top: 1rem; right: 2rem; position: fixed; z-index: 9999;">
+    <div class="error">
+      <div class="error__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none">
+          <path fill="#393a37"
+            d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z">
+          </path>
+        </svg>
+      </div>
+      <div class="error__title" id="titleToast"></div>
+      <button type="button" class="error__close ml-1 mb-1 close" data-bs-dismiss="toast" aria-label="Close"
+        style="background-color: transparent; border: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20">
+          <path fill="#393a37"
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- End error toast -->
+
   <script>
+
+    // Selecciona el body
+    var body = document.body;
+
     // Funcion para las animaciones del loader
     window.addEventListener('load', function () {
       document.getElementById('loaderContainer').style.display = 'none';
@@ -328,6 +403,78 @@
       var myModal = new bootstrap.Modal(document.getElementById('iniciosesion2'));
       myModal.show();
     }
+
+
+    document.getElementById('btnLogin').addEventListener("click", function (e) {
+
+
+
+
+
+      // Elimina la clase "container-body"
+      body.classList.add('container-body');
+
+      e.preventDefault();
+
+
+
+      loaderContainer.style.display = 'block';
+      body.classList.add('dark-background');
+
+
+      // Obtén el token CSRF del formulario
+      let csrfToken = document.getElementById('formLogin').querySelector('[name=csrfmiddlewaretoken]').value;
+      console.log(csrfToken);
+
+      let LoginForm = document.getElementById('formLogin');
+
+      let formData = new FormData(LoginForm);
+
+      console.log(formData)
+
+      fetch('/login/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data as needed
+
+          loaderContainer.style.display = 'none';
+          // Handle the response data as needed
+          console.log(data);
+
+          if (data.status === 'success') {
+
+            window.location.reload();
+          } else {
+
+            body.classList.remove('container-body');
+            var toast = new bootstrap.Toast(document.getElementById('toastStatusError'))
+            // Selecciono el id de los componentes de mi toastStatus
+
+            titleToast.innerText = data.message
+
+
+            toast.show();
+
+
+
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+
+          loaderContainer.style.display = 'none';
+          body.classList.remove('dark-background');
+        });
+
+
+
+    });
   </script>
 
   <!-- End Footer Section -->

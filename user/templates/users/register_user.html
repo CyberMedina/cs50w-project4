@@ -122,14 +122,14 @@
 
               <p class="text">
                 Al registrarme, estoy de acuerdo a los
-                <a href="#">Terminos y condiciones</a> y
-                <a href="#">Politicas de privacidad</a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley" target="_blank">Terminos y condiciones y Politicas de privacidad</a>
               </p>
             </div>
 
           </form>
 
-          <form action="index.html" autocomplete="off" class="sign-up-form">
+          <form action="index.html" autocomplete="off" class="sign-up-form" id="sign-up-form">
+            {% csrf_token %}
             <div class="logo">
               <a href=""><img src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="easyclass" /></a>
               <h4><a href="{% url 'home' %}">Vela<span>roma</span></a></h4>
@@ -202,13 +202,9 @@
                 </div>
               </div>
 
-              <input type="submit" value="Guardar ahora" class="sign-btn btn" id="saveButton" />
-              <input type="submit" value="Omitir" class="sign-btn btn" id="saveButton" />
+              <input type="submit" value="Guardar ahora" class="sign-btn btn" style="margin-bottom: 0rem;" id="saveButton" />
+              <input type="submit" value="Omitir" class="dismiss-btn" id="dismiss-btn" />
 
-              <p class="text">
-                Forgotten your password or you login datails?
-                <a href="#">Get help</a> signing in
-              </p>
             </div>
           </form>
         </div>

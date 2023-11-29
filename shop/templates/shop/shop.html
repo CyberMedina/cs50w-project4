@@ -1,0 +1,250 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block tittle %}Tienda{% endblock %}
+
+{% block customCSS %}
+{% endblock %}
+
+{% block body %}
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="row">
+
+            <div class="navegationLocation">
+
+                <h5><a href="{% url 'home' %}">Inicio</a>/<span>Tienda</span></h5>
+
+            </div>
+            
+            <style>
+
+                h4{
+                    color: #ff7373;
+                    font-weight: bold;
+                }
+
+                h3{
+                    color: #2f2f2f;
+                    font-weight: bold;
+                }
+
+                span{
+                    color: #ff7373;
+                    font-weight: bold;
+                }
+
+                .navegationLocation{
+                    font-weight: bold;
+                    color: #2f2f2f;
+                }
+
+                .navegationLocation span{
+                    font-weight: bold !important;
+                }
+
+                .navigation h5{
+                    font-weight: bold;
+                    color: #2f2f2f;
+                }
+
+                .navegationLocation a{
+                    color: #2f2f2f;
+                    text-decoration: none;
+                }
+
+                .navegationLocation a:hover{
+                    font-weight: bold;
+                    color: #ff7373;
+                }
+
+                .sidebar__item a{
+                    color: #2f2f2f;
+                    text-decoration: none;
+                    
+                }
+
+                .sidebar__item a:hover{
+                    color: #ff7373 !important;
+                    font-weight: bold !important;
+                    
+                }
+
+                .sidebar__item li{
+                    font-weight: bold;
+                    list-style: none;
+                    margin-bottom: 10px;
+                }
+
+
+
+
+
+            </style>
+            
+
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-5">
+                <div class="sidebar">
+                    <div class="sidebar__item">
+                        <h4>Categorías</h4>
+
+                        <ul>
+                            <li><a href="">Veladoras</a></li>
+                            <li><a href="">Veladoras</a></li>
+                            <li><a href="">Veladoras</a></li>
+                            <li><a href="">Veladoras</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-7">
+
+                <h3>Resultados para la busqueda: </h3>
+
+                <div class="filter__item">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-5">
+                            <div class="filter__sort">
+                                <span>Ordenar por</span>
+                                <select>
+                                    <option value="0">Ordenar alfabeticamente A-Z</option>
+                                    <option value="0">Ordenar alfabeticamente Z-A</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+
+
+                    <!-- Start Column 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-6">
+                        <a class="product-item" href="#">
+                            <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">Nordic Chair</h3>
+                            <strong class="product-price">$50.00</strong>
+
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>
+                    <!-- End Column 1 -->
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block customJS %}
+{% endblock %}
