@@ -215,8 +215,14 @@ a.more {
   position: sticky;
   top: 0;
   z-index: 1000; /* Ajusta el valor según sea necesario */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1) !important;
   
+}
+
+.second-navbar{
+  background: #ffffff !important;
+  position: fixed;
+  z-index: 10000 !important; /* Ajusta el valor según sea necesario */
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1) !important;
 }
 
 .custom-navbar .navbar-brand {

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 load_dotenv()
 
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'home',
     'user',
     'shop',
+    'cloudinary',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -161,3 +165,12 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'register_userG'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '13617804765-vpbng7aks3perb29heikgc49a0vbob05.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 LOGIN_REDIRECT_URL = 'home'
+
+
+#Cloudinary settings
+          
+cloudinary.config( 
+  cloud_name = "drmoodyde", 
+  api_key = "386919637429619", 
+  api_secret = "JAUzzmV25gC1vPHkKwG5tARjtHI" 
+)

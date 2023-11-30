@@ -105,7 +105,50 @@
           height: 20px;
           /* Ajusta la altura del icono */
         }
+
+        .sucursal-nombre {
+          display: block;
+        }
+
+
+        .hero__search__phone{
+          display: flex;
+          justify-content: end;
+          margin-right: 8rem;
+        }
+
+
+        .hero__search__phone__icon {
+          font-size: 18px;
+          color: #c70c1e;
+          height: 50px;
+          width: 50px;
+          background: #f5f5f5;
+          line-height: 50px;
+          text-align: center;
+          border-radius: 50%;
+          float: left;
+          margin-right: 20px;
+          margin-left: 20px;
+        }
+
+        .hero__search__phone__text {
+          overflow: hidden;
+        }
+
+        .hero__search__phone__text h5 {
+          color: #1c1c1c;
+          font-weight: 700;
+          margin-bottom: 5px;
+        }
+
+        .hero__search__phone__text span {
+          font-size: 14px;
+          color: #6f6f6f;
+        }
       </style>
+
+
 
       <div class="collapse navbar-collapse" id="navbarsFurni">
         <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
@@ -143,6 +186,46 @@
       </div>
     </div>
   </nav>
+
+  <div class="container second-navbar">
+    <div class="row">
+        <div class="col">
+          <div class="hero__search__phone">
+            <div class="hero__search__phone__icon">
+              <i class="fa fa-map-o" aria-hidden="true"></i>
+            </div>
+            <div class="hero__search__phone__text">
+              <a href="#" data-bs-toggle="modal" data-bs-target="#miModal">
+                </a><a href="#" data-bs-toggle="modal" data-bs-target="#miModal">
+                  <h5>Sucursal:  <span class="arrow_carrot-down"></span></h5>
+                  <span>Abierto hasta: </span>
+                </a>
+      
+              
+      
+      
+              <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel">Sucursales</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+      
+                    <div class="modal-body">
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+  
+    
+  
   <!-- End Header/Navigation -->
 
 
@@ -285,7 +368,8 @@
               <input type="password" id="passw" name="password" placeholder=" " required="">
               <label for="input" class="label">Contraseña</label>
               <div class="lostpass text-lg-end">
-                <a class="text-lg-start" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">¿Ha olvidado su
+                <a class="text-lg-start" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">¿Ha olvidado
+                  su
                   contraseña?</a>
               </div>
               <div class="underline"></div>
