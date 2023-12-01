@@ -178,20 +178,37 @@ def register_location_API(request):
         print(data)
         user = request.user
         if user.is_authenticated:
-            location = NoStaffLocation(
-                user=user,
-                adress_input=data['addressInput'],
-                direction_Name=data['selectedRadioButton'],
-                house_Number=data['houseNumber'],
-                telephone_Number=data['telephoneNumber'],
-                latitude=data['latitude'],
-                longitude=data['longitude'],
-                delivery_Instructions=data['text']
-            )
-            location.save()
-            return JsonResponse({'status': 'success'})
+            try:
+                direction_name = data.get('selectedRadioButton')
+                if not direction_name:
+                    return JsonResponse({'status': 'error', 'message': 'Por favor rellena los campos necesarios!'}, status=400)
+                location = NoStaffLocation(
+                    user=user,
+                    adress_input=data['addressInput'],
+                    direction_Name=direction_name,
+                    house_Number=data['houseNumber'],
+                    telephone_Number=data['telephoneNumber'],
+                    latitude=data['latitude'],
+                    longitude=data['longitude'],
+                    delivery_Instructions=data['text']
+                )
+                location.save()
+                return JsonResponse({'status': 'success'})
+            except Exception as e:
+                return JsonResponse({'status': 'error', 'message': 'Por favor rellena los campos necesarios!'}, status=500)
         else:
             return JsonResponse({'error': 'Usuario no autenticado'}, status=401)
+        
+
+
+def locations_user(request):
+    user = request.user
+    if user.is_authenticated:
+        locations = NoStaffLocation.objects.filter(user=user)
+        print(locations)
+        return render(request, 'users/locations_user.html', {'locations': locations})
+    else:
+        return redirect('/')
 
 
 

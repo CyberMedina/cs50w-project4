@@ -214,15 +214,32 @@ a.more {
   padding-bottom: 20px;
   position: sticky;
   top: 0;
-  z-index: 1000; /* Ajusta el valor según sea necesario */
+  z-index: 5; /* Ajusta el valor según sea necesario */
   
 }
 
+
+@media screen and (max-width: 1200px) {
+  .second-navbar{
+    margin-top: 0 !important;
+    padding-bottom: 0rem !important;
+  }
+}
 .second-navbar{
   background: #ffffff !important;
   position: fixed;
-  z-index: 10000 !important; /* Ajusta el valor según sea necesario */
+  margin-top: -2rem;
+  padding-bottom: 2rem;
+  margin-bottom: 15rem;
+  z-index: 5; /* Ajusta el valor según sea necesario */
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1) !important;
+
+}
+
+
+
+.second-navbar a{
+  text-decoration: none;
 }
 
 .custom-navbar .navbar-brand {
@@ -333,20 +350,21 @@ a.more {
 
 .hero {
   background: #f8f9fa;
-  margin: 5rem 0 3rem 0;
+  margin: 10rem 0 3rem 0;
   
   
 }
 
 @media (min-width: 768px) {
   .hero {
-    padding: calc(4rem - 30px) 0 4rem 0;
+    margin: 10rem 0 3rem 0;
+    
   }
 }
 
 @media (min-width: 992px) {
   .hero {
-    margin: 5rem 0 3rem 0;
+    margin: 12rem 0 3rem 0;
   }
 }
 
@@ -1081,8 +1099,10 @@ a.more {
 
 
 .untree_co-section {
+  margin-top: 5rem;
   padding: 7rem 0;
 }
+
 
 .form-control {
   height: 50px;

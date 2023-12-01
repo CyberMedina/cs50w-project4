@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'home',
+    'homeUser',
     'user',
     'shop',
     'cloudinary',
@@ -160,11 +160,11 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = 'user.CustomUser'
 
 LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'homeUser'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'register_userG'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '13617804765-vpbng7aks3perb29heikgc49a0vbob05.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'homeUser'
 
 
 #Cloudinary settings

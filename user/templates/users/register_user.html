@@ -43,13 +43,13 @@
             {% csrf_token %}
             <div class="logo">
               <a href=""><img src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="easyclass" /></a>
-              <h4><a href="{% url 'home' %}">Vela<span>roma</span></a></h4>
+              <h4><a href="{% url 'homeUser' %}">Vela<span>roma</span></a></h4>
             </div>
 
             <div class="heading">
               <h2>Iniciemos</h2>
               <h6>¿Ya tienes una cuenta?</h6>
-              <a href="{% url 'home' %}?openModal=true" class="toggle">Inicia Sesión</a>
+              <a href="{% url 'homeUser' %}?openModal=true" class="toggle">Inicia Sesión</a>
             </div>
 
 
@@ -65,7 +65,7 @@
               </div>
 
               <div class="input-wrap">
-                <input type="text" class="input-field" autocomplete="new-email" name="email" id="email" maxlength="255" required />
+                <input type="text" class="input-field" autocomplete="new-email" name="email" id="email" maxlength="100" required />
                 <label>Correo electrónico</label>
                 <div class="custom-tooltip" id="error-email-tooltip"></div>
               </div>
@@ -132,7 +132,7 @@
             {% csrf_token %}
             <div class="logo">
               <a href=""><img src="{% static 'users/images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="easyclass" /></a>
-              <h4><a href="{% url 'home' %}">Vela<span>roma</span></a></h4>
+              <h4><a href="{% url 'homeUser' %}">Vela<span>roma</span></a></h4>
             </div>
 
             <div class="heading registrarse-heading">

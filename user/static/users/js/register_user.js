@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
 
     // Obtén el token CSRF del formulario
-    let csrfToken = document.getElementById('sign-up-form').querySelector('[name=csrfmiddlewaretoken]').value;
+    let csrfToken = document.getElementById('sign-up-form').querySelectorAll('[name=csrfmiddlewaretoken]').value;
     console.log(csrfToken);
 
     let data = {
@@ -350,23 +350,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         } else {
+
           loaderContainer.style.display = 'none'; // Quitar la animación del loader
           body.classList.remove('dark-background');// Quitar lo oscuro del body
 
           var toast = new bootstrap.Toast(document.getElementById('toastStatus'))
           // Selecciono el id de los componentes de mi toastStatus
-          var titleToast = document.getElementById('titleToast');
 
           titleToast.innerText = data.message
 
-          toast.show();
+
+
+          loaderContainer.style.display = 'none';
+          body.classList.remove('dark-background');
+          $('.toast').toast({ delay: 5000 }); // El toast se mostrará durante 5 segundos
+          $('.toast').toast('show');
+
+
 
           document.getElementById('saveButton').classList.remove('disabled-button');// Quita el botón deshabilitado
 
         }
       })
       .catch(error => {
-        console.error('Error:', error);
+      
+
+        loaderContainer.style.display = 'none';
+        body.classList.remove('dark-background');
+        $('.toast').toast({ delay: 5000 }); // El toast se mostrará durante 5 segundos
+        $('.toast').toast('show');
+
+
         document.getElementById('saveButton').classList.remove('disabled-button');// Quita el botón deshabilitado
         loaderContainer.style.display = 'none'; // Quitar la animación del loader
         body.classList.remove('dark-background');// Quitar lo oscuro del body

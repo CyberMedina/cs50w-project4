@@ -12,6 +12,9 @@
 {% block searchbar %}
 {% endblock %}
 
+{% block branch %}
+{% endblock %}
+
 <!-- Asegúrate de incluir la biblioteca GSAP en tu proyecto -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 
@@ -32,7 +35,7 @@
       </div>
       <div class="col-lg-7">
         <div class="hero-img-wrap">
-          <img src="{% static 'home/images/Velaprueba.webp' %}" class="img-fluid">
+          <img src="{% static 'homeUser/images/Velaprueba.webp' %}" class="img-fluid">
         </div>
       </div>
     </div>
@@ -59,12 +62,12 @@
       <!-- Start Column 2 -->
       <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
         <a class="product-item" href="cart.html">
-          <img src="{% static 'home/images/Vela3.png' %}" class="img-fluid product-thumbnail">
+          <img src="{% static 'homeUser/images/Vela3.png' %}" class="img-fluid product-thumbnail">
           <h3 class="product-title">Aroma a Fresa</h3>
           <strong class="product-price">C$ 70.00</strong>
 
           <span class="icon-cross">
-            <img src="{% static 'home/images/cross.svg' %}" class="img-fluid">
+            <img src="{% static 'homeUser/images/cross.svg' %}" class="img-fluid">
           </span>
         </a>
       </div>
@@ -73,12 +76,12 @@
       <!-- Start Column 3 -->
       <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
         <a class="product-item" href="cart.html">
-          <img src="{% static 'home/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
+          <img src="{% static 'homeUser/images/Velaprueba.png' %}" class="img-fluid product-thumbnail">
           <h3 class="product-title">Aroma a Canela</h3>
           <strong class="product-price">C$ 70.00</strong>
 
           <span class="icon-cross">
-            <img src="{% static 'home/images/cross.svg' %}" class="img-fluid">
+            <img src="{% static 'homeUser/images/cross.svg' %}" class="img-fluid">
           </span>
         </a>
       </div>
@@ -87,12 +90,12 @@
       <!-- Start Column 4 -->
       <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
         <a class="product-item" href="cart.html">
-          <img src="{% static 'home/images/Vela2.png' %}" class="img-fluid product-thumbnail">
+          <img src="{% static 'homeUser/images/Vela2.png' %}" class="img-fluid product-thumbnail">
           <h3 class="product-title">Aroma a lavanda</h3>
           <strong class="product-price">C$ 70.00</strong>
 
           <span class="icon-cross">
-            <img src="{% static 'home/images/cross.svg' %}" class="img-fluid">
+            <img src="{% static 'homeUser/images/cross.svg' %}" class="img-fluid">
           </span>
         </a>
       </div>
@@ -117,7 +120,7 @@
             <div class="col-6 col-md-6">
               <div class="feature">
                 <div class="icon">
-                  <img src="{% static 'home/images/cupcake.png' %}" alt="Image" class="imf-fluid">
+                  <img src="{% static 'homeUser/images/cupcake.png' %}" alt="Image" class="imf-fluid">
                 </div>
                 <h3><span><strong>Diseños únicos</strong></span></h3>
                 <p>Los diseños en forma de cupcakes o panquesitos de las veladoras de Velaroma son únicos y se destacan
@@ -128,7 +131,7 @@
             <div class="col-6 col-md-6">
               <div class="feature">
                 <div class="icon">
-                  <img src="{% static 'home/images/Time.png' %}" alt="Image" class="imf-fluid">
+                  <img src="{% static 'homeUser/images/Time.png' %}" alt="Image" class="imf-fluid">
                 </div>
                 <h3><span><strong>Durabilidad</strong></span></h3>
                 <p>Tienen una duración aproximada de 55 minutos antes de derretirse por completo. Esto garantiza una
@@ -139,7 +142,7 @@
             <div class="col-6 col-md-6">
               <div class="feature">
                 <div class="icon">
-                  <img src="{% static 'home/images/Price.png' %}" alt="Image" class="imf-fluid">
+                  <img src="{% static 'homeUser/images/Price.png' %}" alt="Image" class="imf-fluid">
                 </div>
                 <h3><span><strong>Precios competitivos</strong></span></h3>
                 <p>Las veladoras Velaroma tienen un precio que es justo y asequible. Obtendrás veladoras de calidad a un
@@ -150,7 +153,7 @@
             <div class="col-6 col-md-6">
               <div class="feature">
                 <div class="icon">
-                  <img src="{% static 'home/images/scent.png' %}" alt="Image" class="imf-fluid">
+                  <img src="{% static 'homeUser/images/scent.png' %}" alt="Image" class="imf-fluid">
                 </div>
                 <h3><span><strong>Variedad de aromas cautivadores</strong></span></h3>
                 <p> Ofrecemos una amplia gama de aromas irresistibles que satisfacen diferentes preferencias y crean
@@ -213,11 +216,11 @@
     <div class="row justify-content-between">
       <div class="col-lg-7 mb-5 mb-lg-0">
         <div class="imgs-grid">
-          <div class="grid grid-1"><img src="{% static 'home/images/Vela-mantel.jpeg' %}"
+          <div class="grid grid-1"><img src="{% static 'homeUser/images/Vela-mantel.jpeg' %}"
               alt="Untree.co">
           </div>
-          <div class="grid grid-2"><img src="{% static 'home/images/Candela mesa.png' %}"></div>
-          <div class="grid grid-3"><img src="{% static 'home/images/Vela consumida.jpg' %}"></div>
+          <div class="grid grid-2"><img src="{% static 'homeUser/images/Candela mesa.png' %}"></div>
+          <div class="grid grid-3"><img src="{% static 'homeUser/images/Vela consumida.jpg' %}"></div>
         </div>
       </div>
       <div class="col-lg-5 ps-lg-5">
@@ -328,9 +331,6 @@
 
 {% endblock %}
 {% block customJS %}
-<script src="{% static 'home/js/scripts.js' %}"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/tiny-slider.js"></script>
-<script src="js/custom.js"></script>
+
 {% endblock %}
 
