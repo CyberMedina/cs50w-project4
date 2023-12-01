@@ -204,12 +204,20 @@ def register_location_API(request):
 def locations_user(request):
     user = request.user
     if user.is_authenticated:
-        locations = NoStaffLocation.objects.filter(user=user)
+        locations = NoStaffLocation.objects.filter(user=request.user)
+
         print(locations)
-        return render(request, 'users/locations_user.html', {'locations': locations})
+
+
+        return render(request, 'users/locations_user.html', {'locations': locations })
     else:
         return redirect('/')
 
+
+def delete_location(request, id):
+    location = NoStaffLocation.objects.get(id=id)
+    location.delete()
+    return redirect('locations_user')
 
 
 

@@ -17,44 +17,43 @@
 {% block body %}
 <div class="container">
     <h2>Ubicaciones</h2>
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-    </button>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <a class="btn btn-primary" href="{% url 'register_user_location' %}">Agregar ubicaicón</a>
+
+    {% if locations %}
     <div class="table-responsive small">
         <table class="table table-striped table-sm">
-            {% for location in locations %}
             <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">Nombre de esa dirección</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Número de casa</th>
+                    <th scope="col">Indicaciones de envío</th>
+                    <th scope="col">Número de teléfono</th>
+                    <th scope="col">Ver en google maps</th>
+                    <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                </tr>
-                {% endfor %}
+                {% for location in locations %}
+                    <tr>
+
+                        <td>{{ location.direction_Name }}</td>
+                        <td>{{ location.adress_input }}</td>
+                        <td>{{ location.house_Number }}</td>
+                        <td>{{ location.delivery_Instructions }}</td>
+                        <td>{{ location.telephone_Number}}</td>
+                        <td><a class="btn" href="{{ location.get_google_maps_url }}" target="_blank">a</a></td>
+                        <td><a class="btn btn-danger" href="{% url 'delete_location' location.id %}">Eliminar</a></td>
+
+                    </tr>
+                    {% endfor %}
+
             </tbody>
         </table>
     </div>
+{% else %}
+    <h3>No hay ubicaciones</h3>
+{% endif %}
 </div>
 {% endblock %}

@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from homeUser.views import homeUser
-from user.views import register_user, register_user_API
 from shop.views import shop
 
 urlpatterns = [

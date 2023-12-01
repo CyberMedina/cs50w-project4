@@ -103,7 +103,13 @@
 
             <div class="col-lg-9 col-md-7">
 
-                <h3>Resultados para la busqueda: </h3>
+                {% if query %}
+
+                <h3>Resultados para la busqueda: {{ query }} </h3>
+
+                {% endif %}
+
+
 
                 <div class="filter__item">
                     <div class="row">

@@ -63,13 +63,13 @@
       </button>
 
       {% block searchbar %}
-      <div class="input-group mb-3 mb-lg-0  w-100 w-lg-auto">
-        <input type="text" class="form-control" placeholder="¿Qué buscas?" aria-label="Search"
+      <form class="input-group mb-3 mb-lg-0  w-100 w-lg-auto" action="{% url 'shop' %}" method="GET">
+        <input type="text" name="query" id="query" class="form-control" placeholder="¿Qué buscas?" aria-label="Search"
           aria-describedby="button-addon2">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
           <img src="{% static 'images/search.png' %}" alt="search.png">
         </button>
-      </div>
+      </form>
       {% endblock %}
 
       <style>
@@ -193,428 +193,532 @@
 
 
 
-{% block branch %}
-<div class="container second-navbar">
-  <div class="row">
-    <div class="col">
-      <div class="hero__search__phone">
-        <div class="hero__search__phone__icon">
-          <i class="fa fa-map-o" aria-hidden="true"></i>
-        </div>
-        <div class="hero__search__phone__text">
-          <a href="#" data-bs-toggle="modal" data-bs-target="#miModal">
-          </a><a href="#" data-bs-toggle="modal" data-bs-target="#miModal">
-            <h5>Sucursal:<span class="arrow_carrot-down"></span></h5>
-            <span>René Cisneros</span>
-          </a>
+  {% block branch %}
+  <div class="container second-navbar">
+    <div class="row">
+      <div class="col">
+        <div class="hero__search__phone">
+          <div class="hero__search__phone__icon">
+            <i class="fa fa-map-o" aria-hidden="true"></i>
+          </div>
+          <div class="hero__search__phone__text">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#miModal">
+            </a><a href="#" data-bs-toggle="modal" data-bs-target="#miModal">
+              <h5>Sucursal:<span class="arrow_carrot-down"></span></h5>
+              <span>{{ request.sucursal_seleccionada }}</span>
+            </a>
 
-          <script>
-            document.addEventListener('DOMContentLoaded', function () {
-              var dropdowns = document.querySelectorAll('.dropdown-menu');
-              var navbar = document.querySelector('.second-navbar');
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                var dropdowns = document.querySelectorAll('.dropdown-menu');
+                var navbar = document.querySelector('.second-navbar');
 
-              dropdowns.forEach(function (dropdown) {
-                var observer = new MutationObserver(function (mutations) {
-                  mutations.forEach(function (mutation) {
-                    if (mutation.attributeName === 'class') {
-                      var currentClassValue = dropdown.getAttribute('class');
-                      if (currentClassValue.includes('show')) {
-                        // El menú desplegable está abierto, así que reducimos el z-index del navbar
-                        navbar.style.zIndex = '4';
-                      } else {
-                        // El menú desplegable está cerrado, así que aumentamos el z-index del navbar
-                        navbar.style.zIndex = '5';
+                dropdowns.forEach(function (dropdown) {
+                  var observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                      if (mutation.attributeName === 'class') {
+                        var currentClassValue = dropdown.getAttribute('class');
+                        if (currentClassValue.includes('show')) {
+                          // El menú desplegable está abierto, así que reducimos el z-index del navbar
+                          navbar.style.zIndex = '4';
+                        } else {
+                          // El menú desplegable está cerrado, así que aumentamos el z-index del navbar
+                          navbar.style.zIndex = '5';
+                        }
                       }
-                    }
+                    });
                   });
+
+                  observer.observe(dropdown, { attributes: true });
                 });
-
-                observer.observe(dropdown, { attributes: true });
               });
-            });
-          </script>
+            </script>
 
-          <!-- End Header/Navigation -->
+            <!-- End Header/Navigation -->
 
-          
+
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal" id="miModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+  <div class="modal" id="miModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sucursales</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {% for sucursal in request.sucursales %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ sucursal.nombre }}</h5>
+              <p class="card-text">Dirección: <a href="{{sucursal.direccion_maps}}" target="_blank">{{
+                  sucursal.direccion_texto }}</a></p>
+              <p class="card-text">Teléfono: {{ sucursal.telefono }}</p>
+              <a href="#" onclick="setSucursal('{{ sucursal.id }}');" class="btn btn-primary">Seleccionar</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-{% endblock %}
-
-  
-
-            <!-- Bootstrap JS -->
-            {% block body %}
-
-            {% endblock %}
+  {% endblock %}
 
 
-            <!-- Start shopping Cart -->
-            <div class="shopping-cart" id="shopping-cart" data-product-count="0">
-              <span><img src="{% static 'images/cart.png' %}" alt="" width="25px" height="25px"></span>
+  <script>
+
+    // Elimina la clase "container-body"
+    body.classList.add('container-body');
+
+    e.preventDefault();
+
+
+
+    loaderContainer.style.display = 'block';
+    body.classList.add('dark-background');
+
+
+    // Obtén el token CSRF del formulario
+    let csrfToken = document.getElementById('formLogin').querySelector('[name=csrfmiddlewaretoken]').value;
+    console.log(csrfToken);
+
+    let LoginForm = document.getElementById('formLogin');
+
+    let formData = new FormData(LoginForm);
+
+    console.log(formData)
+
+    fetch('/login/', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data as needed
+
+        loaderContainer.style.display = 'none';
+        // Handle the response data as needed
+        console.log(data);
+
+        if (data.status === 'success') {
+
+          window.location.reload();
+        } else {
+
+          body.classList.remove('container-body');
+          var toast = new bootstrap.Toast(document.getElementById('toastStatusError'))
+          // Selecciono el id de los componentes de mi toastStatus
+
+          titleToast.innerText = data.message
+
+
+          toast.show();
+
+
+
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+
+        loaderContainer.style.display = 'none';
+        body.classList.remove('dark-background');
+      });
+
+
+
+
+
+    function setSucursal(sucursalId) {
+
+      loaderContainer.style.display = 'block';
+      body.classList.add('dark-background');
+
+      fetch('/set_sucursal/' + sucursalId + '/', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+
+
+
+          loaderContainer.style.display = 'none';
+
+          if (data.status === 'success') {
+
+            window.location.reload();
+          } else {
+
+            body.classList.remove('container-body');
+            var toast = new bootstrap.Toast(document.getElementById('toastStatusError'))
+            // Selecciono el id de los componentes de mi toastStatus
+
+            titleToast.innerText = data.message
+            // Handle the response data as needed
+
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  </script>
+  <!-- Bootstrap JS -->
+  {% block body %}
+
+  {% endblock %}
+
+
+  <!-- Start shopping Cart -->
+  <div class="shopping-cart" id="shopping-cart" data-product-count="0">
+    <span><img src="{% static 'images/cart.png' %}" alt="" width="25px" height="25px"></span>
+  </div>
+  <!-- Ending shopping Cart -->
+
+  <!-- start off canvas to show cart items -->
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasShoppingList" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasRightLabel">Carrito de compras</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body"></div>
+  </div>
+
+  <script>
+
+    document.getElementById('shopping-cart').addEventListener("click", function () {
+      var offcanvasBody = document.querySelector('.offcanvas .offcanvas-body');
+
+      var offcanvasElement = document.getElementById('offCanvasShoppingList');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement);
+
+      if (offcanvasBody.innerHTML.trim() === '') {
+        offcanvasBody.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><p>El carrito aún está vacío</p></div>';
+      } else {
+        // El offcanvas no está vacío, no hacer nada
+      }
+
+      bsOffcanvas.show();
+
+    });
+
+
+
+
+
+
+
+  </script>
+
+  <!-- end off canvas to show cart items -->
+
+  <!-- Start scroll bar -->
+  <div id="progress">
+    <span id="progress-value"><img src="{% static 'images/arrow_up.png' %}" alt="" width="25px" height="25px"></span>
+    <script>
+      let calcScrollValue = () => {
+        let scrollProgress = document.getElementById("progress");
+        let progressValue = document.getElementById("progress-value");
+        let pos = document.documentElement.scrollTop;
+        let calcHeight =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        let scrollValue = Math.round((pos * 100) / calcHeight);
+        if (pos > 100) {
+          scrollProgress.style.display = "grid";
+        } else {
+          scrollProgress.style.display = "none";
+        }
+        scrollProgress.addEventListener("click", () => {
+          document.documentElement.scrollTop = 0;
+        });
+        scrollProgress.style.background = `conic-gradient(#ff7373 ${scrollValue}%, #d7d7d7 ${scrollValue}%)`;
+      };
+
+      document.addEventListener("DOMContentLoaded", calcScrollValue); // Modificación
+
+      window.onscroll = calcScrollValue;
+
+
+    </script>
+  </div>
+  <!-- End scroll bar -->
+  <!-- Start Footer Section -->
+  <footer class="pie-de-pagina">
+    <div class="grupo-1">
+      <div class="box box-logo">
+        <div class="logo-footer">
+          <a href="#" class="text-logo">Vela<span>roma</span>
+          </a>
+        </div>
+      </div>
+      <div class="box">
+        <h2>Sobre <span>nosotros</span></h2>
+        <p>Somos CoffeShop un negocio dedicado a la producción y comercialización de café, cultivado en las
+          mejoras
+          zonas cafetaleras de Nicaragua.</p>
+        <p><a class="footer-text-map" href="https://goo.gl/maps/6wVeDe94XpyQnCTX9"><i class="fa-solid fa-map-pin"
+              style="color: #6d1f00;"></i> Ciudad Jardín, Calle 13 Sur Oeste</a>
+        </p>
+      </div>
+      <div class="box">
+        <h2>Siguenos en nuestras <span>redes sociales</span></h2>
+        <div class="red-social">
+          <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-facebook"></a>
+          <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-instagram"></a>
+          <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-twitter"></a>
+          <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-youtube"></a>
+        </div>
+      </div>
+    </div>
+    <div class="grupo-2">
+      <small>&copy; 2023 <b>Medina Jhonatan <b><span>- Copyright LOLOLOL</span></b></b></small>
+    </div>
+  </footer>
+
+  <!-- Modal Login -->
+  <div class="modal fade" id="iniciosesion2" tabindex="-1" aria-labelledby="iniciosesion2Title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="modal-title custom-modal-title">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="loginlogo text-center">
+            <img src="{% static 'images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="">
+          </div>
+          <form class="text-center custom-form" id="formLogin" action="" method="POST">
+            {% csrf_token %}
+            <h5 class="TittleLogin">Inicio de <span>sesión</span></h5>
+            <div class="custom-paragraph">
+              <p>Por favor introduzca sus datos a continuación: </p>
             </div>
-            <!-- Ending shopping Cart -->
-
-            <!-- start off canvas to show cart items -->
-
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offCanvasShoppingList"
-              aria-labelledby="offcanvasRightLabel">
-              <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasRightLabel">Carrito de compras</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body"></div>
+            <div class="input-container">
+              <input type="email" id="email" name="email" placeholder=" " required="">
+              <label for="input" class="label">Correo electrónico</label>
+              <div class="underline"></div>
             </div>
-
-            <script>
-
-              document.getElementById('shopping-cart').addEventListener("click", function () {
-                var offcanvasBody = document.querySelector('.offcanvas .offcanvas-body');
-
-                var offcanvasElement = document.getElementById('offCanvasShoppingList');
-                var bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement);
-
-                if (offcanvasBody.innerHTML.trim() === '') {
-                  offcanvasBody.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><p>El carrito aún está vacío</p></div>';
-                } else {
-                  // El offcanvas no está vacío, no hacer nada
-                }
-
-                bsOffcanvas.show();
-
-              });
-
-
-
-
-
-
-
-            </script>
-
-            <!-- end off canvas to show cart items -->
-
-            <!-- Start scroll bar -->
-            <div id="progress">
-              <span id="progress-value"><img src="{% static 'images/arrow_up.png' %}" alt="" width="25px"
-                  height="25px"></span>
-              <script>
-                let calcScrollValue = () => {
-                  let scrollProgress = document.getElementById("progress");
-                  let progressValue = document.getElementById("progress-value");
-                  let pos = document.documentElement.scrollTop;
-                  let calcHeight =
-                    document.documentElement.scrollHeight -
-                    document.documentElement.clientHeight;
-                  let scrollValue = Math.round((pos * 100) / calcHeight);
-                  if (pos > 100) {
-                    scrollProgress.style.display = "grid";
-                  } else {
-                    scrollProgress.style.display = "none";
-                  }
-                  scrollProgress.addEventListener("click", () => {
-                    document.documentElement.scrollTop = 0;
-                  });
-                  scrollProgress.style.background = `conic-gradient(#ff7373 ${scrollValue}%, #d7d7d7 ${scrollValue}%)`;
-                };
-
-                document.addEventListener("DOMContentLoaded", calcScrollValue); // Modificación
-
-                window.onscroll = calcScrollValue;
-
-
-              </script>
+            <div class="input-container input-pass">
+              <input type="password" id="passw" name="password" placeholder=" " required="">
+              <label for="input" class="label">Contraseña</label>
+              <div class="lostpass text-lg-end">
+                <a class="text-lg-start" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">¿Ha olvidado
+                  su
+                  contraseña?</a>
+              </div>
+              <div class="underline"></div>
             </div>
-            <!-- End scroll bar -->
-            <!-- Start Footer Section -->
-            <footer class="pie-de-pagina">
-              <div class="grupo-1">
-                <div class="box box-logo">
-                  <div class="logo-footer">
-                    <a href="#" class="text-logo">Vela<span>roma</span>
-                    </a>
-                  </div>
+            <button class="btn btn-block" type="submit" id="btnLogin">Iniciar sesión</button>
+            <p class="mt-2">¿No tienes una cuenta? <a href="{% url 'register_user' %}">Regístrate</a></p>
+            <div class="container custom-container-o">
+              <div class="row custom-row">
+                <div class="col">
+                  <hr>
                 </div>
-                <div class="box">
-                  <h2>Sobre <span>nosotros</span></h2>
-                  <p>Somos CoffeShop un negocio dedicado a la producción y comercialización de café, cultivado en las
-                    mejoras
-                    zonas cafetaleras de Nicaragua.</p>
-                  <p><a class="footer-text-map" href="https://goo.gl/maps/6wVeDe94XpyQnCTX9"><i
-                        class="fa-solid fa-map-pin" style="color: #6d1f00;"></i> Ciudad Jardín, Calle 13 Sur Oeste</a>
-                  </p>
-                </div>
-                <div class="box">
-                  <h2>Siguenos en nuestras <span>redes sociales</span></h2>
-                  <div class="red-social">
-                    <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-facebook"></a>
-                    <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-instagram"></a>
-                    <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-twitter"></a>
-                    <a href="https://youtu.be/dQw4w9WgXcQ" class="fa fa-youtube"></a>
-                  </div>
-                </div>
-              </div>
-              <div class="grupo-2">
-                <small>&copy; 2023 <b>Medina Jhonatan <b><span>- Copyright LOLOLOL</span></b></b></small>
-              </div>
-            </footer>
-
-            <!-- Modal Login -->
-            <div class="modal fade" id="iniciosesion2" tabindex="-1" aria-labelledby="iniciosesion2Title"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-body">
-                    <div class="modal-title custom-modal-title">
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="loginlogo text-center">
-                      <img src="{% static 'images/Logo-Velaroma-Sin-FondoPEQUE.png' %}" alt="">
-                    </div>
-                    <form class="text-center custom-form" id="formLogin" action="" method="POST">
-                      {% csrf_token %}
-                      <h5 class="TittleLogin">Inicio de <span>sesión</span></h5>
-                      <div class="custom-paragraph">
-                        <p>Por favor introduzca sus datos a continuación: </p>
-                      </div>
-                      <div class="input-container">
-                        <input type="email" id="email" name="email" placeholder=" " required="">
-                        <label for="input" class="label">Correo electrónico</label>
-                        <div class="underline"></div>
-                      </div>
-                      <div class="input-container input-pass">
-                        <input type="password" id="passw" name="password" placeholder=" " required="">
-                        <label for="input" class="label">Contraseña</label>
-                        <div class="lostpass text-lg-end">
-                          <a class="text-lg-start" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                            target="_blank">¿Ha olvidado
-                            su
-                            contraseña?</a>
-                        </div>
-                        <div class="underline"></div>
-                      </div>
-                      <button class="btn btn-block" type="submit" id="btnLogin">Iniciar sesión</button>
-                      <p class="mt-2">¿No tienes una cuenta? <a href="{% url 'register_user' %}">Regístrate</a></p>
-                      <div class="container custom-container-o">
-                        <div class="row custom-row">
-                          <div class="col">
-                            <hr>
-                          </div>
-                          O
-                          <div class="col">
-                            <hr>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="custom-button">
-                        <a class="buttonGoogle" id="btnRegisterGoogle" href="{% url 'social:begin' 'google-oauth2' %}">
-                          <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
-                            <path fill="#4285F4"
-                              d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027">
-                            </path>
-                            <path fill="#34A853"
-                              d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1">
-                            </path>
-                            <path fill="#FBBC05"
-                              d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782">
-                            </path>
-                            <path fill="#EB4335"
-                              d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251">
-                            </path>
-                          </svg>
-                          Iniciar sesión con Google
-                        </a>
-                      </div>
-                    </form>
-                  </div>
+                O
+                <div class="col">
+                  <hr>
                 </div>
               </div>
             </div>
-
-            <!-- Start error toast -->
-            <div class="toast" id="toastStatusError" style="top: 1rem; right: 2rem; position: fixed; z-index: 9999;">
-              <div class="error">
-                <div class="error__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none">
-                    <path fill="#393a37"
-                      d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z">
-                    </path>
-                  </svg>
-                </div>
-                <div class="error__title" id="titleToast"></div>
-                <button type="button" class="error__close ml-1 mb-1 close" data-bs-dismiss="toast" aria-label="Close"
-                  style="background-color: transparent; border: none;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20">
-                    <path fill="#393a37"
-                      d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z">
-                    </path>
-                  </svg>
-                </button>
-              </div>
+            <div class="custom-button">
+              <a class="buttonGoogle" id="btnRegisterGoogle" href="{% url 'social:begin' 'google-oauth2' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 262">
+                  <path fill="#4285F4"
+                    d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027">
+                  </path>
+                  <path fill="#34A853"
+                    d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1">
+                  </path>
+                  <path fill="#FBBC05"
+                    d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782">
+                  </path>
+                  <path fill="#EB4335"
+                    d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251">
+                  </path>
+                </svg>
+                Iniciar sesión con Google
+              </a>
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            <!-- End error toast -->
+  <!-- Start error toast -->
+  <div class="toast" id="toastStatusError" style="top: 1rem; right: 2rem; position: fixed; z-index: 9999;">
+    <div class="error">
+      <div class="error__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none">
+          <path fill="#393a37"
+            d="m13 13h-2v-6h2zm0 4h-2v-2h2zm-1-15c-1.3132 0-2.61358.25866-3.82683.7612-1.21326.50255-2.31565 1.23915-3.24424 2.16773-1.87536 1.87537-2.92893 4.41891-2.92893 7.07107 0 2.6522 1.05357 5.1957 2.92893 7.0711.92859.9286 2.03098 1.6651 3.24424 2.1677 1.21325.5025 2.51363.7612 3.82683.7612 2.6522 0 5.1957-1.0536 7.0711-2.9289 1.8753-1.8754 2.9289-4.4189 2.9289-7.0711 0-1.3132-.2587-2.61358-.7612-3.82683-.5026-1.21326-1.2391-2.31565-2.1677-3.24424-.9286-.92858-2.031-1.66518-3.2443-2.16773-1.2132-.50254-2.5136-.7612-3.8268-.7612z">
+          </path>
+        </svg>
+      </div>
+      <div class="error__title" id="titleToast"></div>
+      <button type="button" class="error__close ml-1 mb-1 close" data-bs-dismiss="toast" aria-label="Close"
+        style="background-color: transparent; border: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20">
+          <path fill="#393a37"
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-            <script>
+  <!-- End error toast -->
 
-              // Selecciona el body
-              var body = document.body;
+  <script>
 
-              // Funcion para las animaciones del loader
-              window.addEventListener('load', function () {
-                document.getElementById('loaderContainer').style.display = 'none';
+    // Selecciona el body
+    var body = document.body;
 
-                // Selecciona el body
-                var body = document.body;
+    // Funcion para las animaciones del loader
+    window.addEventListener('load', function () {
+      document.getElementById('loaderContainer').style.display = 'none';
 
-
-
-                // Elimina la clase "container-body"
-                body.classList.remove('container-body');
-
-                // También puedes eliminar el pseudo-elemento :before
-                var beforeElement = document.querySelector('body:before');
-                if (beforeElement) {
-                  beforeElement.parentNode.removeChild(beforeElement);
-                }
-
-
-
-              });
-
-
-              // Abrir modal con url
-              window.onload = function () {
-                // Verificar si hay un parámetro en la URL indicando que se debe abrir el modal
-                const urlParams = new URLSearchParams(window.location.search);
-                const openModal = urlParams.get('openModal');
-
-                // Si el parámetro está presente y tiene un valor específico, abrir el modal
-                if (openModal === 'true') {
-
-                  // Abrir el modal
-                  openLoginModal();
-
-                  // Remover el parámetro 'openModal' de la URL
-                  const newURL = window.location.href.split('?')[0];
-                  window.history.replaceState({}, document.title, newURL);
-
-                }
-              };
-              // Con esto abro el modal de inicio de sesión
-              function openLoginModal() {
-                var myModal = new bootstrap.Modal(document.getElementById('iniciosesion2'));
-                myModal.show();
-              }
-
-
-              document.getElementById('btnLogin').addEventListener("click", function (e) {
+      // Selecciona el body
+      var body = document.body;
 
 
 
+      // Elimina la clase "container-body"
+      body.classList.remove('container-body');
 
-
-                // Elimina la clase "container-body"
-                body.classList.add('container-body');
-
-                e.preventDefault();
-
-
-
-                loaderContainer.style.display = 'block';
-                body.classList.add('dark-background');
-
-
-                // Obtén el token CSRF del formulario
-                let csrfToken = document.getElementById('formLogin').querySelector('[name=csrfmiddlewaretoken]').value;
-                console.log(csrfToken);
-
-                let LoginForm = document.getElementById('formLogin');
-
-                let formData = new FormData(LoginForm);
-
-                console.log(formData)
-
-                fetch('/login/', {
-                  method: 'POST',
-                  headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                  },
-                  body: formData
-                })
-                  .then(response => response.json())
-                  .then(data => {
-                    // Handle the response data as needed
-
-                    loaderContainer.style.display = 'none';
-                    // Handle the response data as needed
-                    console.log(data);
-
-                    if (data.status === 'success') {
-
-                      window.location.reload();
-                    } else {
-
-                      body.classList.remove('container-body');
-                      var toast = new bootstrap.Toast(document.getElementById('toastStatusError'))
-                      // Selecciono el id de los componentes de mi toastStatus
-
-                      titleToast.innerText = data.message
-
-
-                      toast.show();
+      // También puedes eliminar el pseudo-elemento :before
+      var beforeElement = document.querySelector('body:before');
+      if (beforeElement) {
+        beforeElement.parentNode.removeChild(beforeElement);
+      }
 
 
 
-                    }
-                  })
-                  .catch(error => {
-                    console.error('Error:', error);
-
-                    loaderContainer.style.display = 'none';
-                    body.classList.remove('dark-background');
-                  });
+    });
 
 
+    // Abrir modal con url
+    window.onload = function () {
+      // Verificar si hay un parámetro en la URL indicando que se debe abrir el modal
+      const urlParams = new URLSearchParams(window.location.search);
+      const openModal = urlParams.get('openModal');
 
-              });
-            </script>
+      // Si el parámetro está presente y tiene un valor específico, abrir el modal
+      if (openModal === 'true') {
 
-            <!-- End Footer Section -->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+        // Abrir el modal
+        openLoginModal();
 
-            <!-- CDN Font awesome -->
-            <script src="https://kit.fontawesome.com/9b8b75d2fb.js" crossorigin="anonymous"></script>
+        // Remover el parámetro 'openModal' de la URL
+        const newURL = window.location.href.split('?')[0];
+        window.history.replaceState({}, document.title, newURL);
+
+      }
+    };
+    // Con esto abro el modal de inicio de sesión
+    function openLoginModal() {
+      var myModal = new bootstrap.Modal(document.getElementById('iniciosesion2'));
+      myModal.show();
+    }
 
 
-            <!-- Custom JS -->
-            <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    document.getElementById('btnLogin').addEventListener("click", function (e) {
 
 
 
-            {% block customJS %}
-            {% endblock %}
+
+
+      // Elimina la clase "container-body"
+      body.classList.add('container-body');
+
+      e.preventDefault();
+
+
+
+      loaderContainer.style.display = 'block';
+      body.classList.add('dark-background');
+
+
+      // Obtén el token CSRF del formulario
+      let csrfToken = document.getElementById('formLogin').querySelector('[name=csrfmiddlewaretoken]').value;
+      console.log(csrfToken);
+
+      let LoginForm = document.getElementById('formLogin');
+
+      let formData = new FormData(LoginForm);
+
+      console.log(formData)
+
+      fetch('/login/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data as needed
+
+          loaderContainer.style.display = 'none';
+          // Handle the response data as needed
+          console.log(data);
+
+          if (data.status === 'success') {
+
+            window.location.reload();
+          } else {
+
+            body.classList.remove('container-body');
+            var toast = new bootstrap.Toast(document.getElementById('toastStatusError'))
+            // Selecciono el id de los componentes de mi toastStatus
+
+            titleToast.innerText = data.message
+
+
+            toast.show();
+
+
+
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+
+          loaderContainer.style.display = 'none';
+          body.classList.remove('dark-background');
+        });
+
+
+
+    });
+  </script>
+
+  <!-- End Footer Section -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- CDN Font awesome -->
+  <script src="https://kit.fontawesome.com/9b8b75d2fb.js" crossorigin="anonymous"></script>
+
+
+  <!-- Custom JS -->
+  <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+
+
+
+  {% block customJS %}
+  {% endblock %}
 </body>
 
 </html>
