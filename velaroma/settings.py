@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'homeUser',
     'user',
     'shop',
+    'orders',
     'cloudinary',
     'django.contrib.admin',
     'django.contrib.auth',

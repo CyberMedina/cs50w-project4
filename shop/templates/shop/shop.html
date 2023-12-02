@@ -127,6 +127,10 @@
 
                 <div class="row mt-5">
 
+                    <style>
+
+                    </style>
+
                     <!-- Start Column 1 -->
                     {% for producto in productos %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-6">
@@ -134,13 +138,18 @@
                             <img src="{{ producto.imagen_url.url }}" class="img-fluid product-thumbnail">
                             <h3 class="product-title">{{ producto.nombre }}</h3>
                             <strong class="product-price">${{ producto.precio }}</strong>
-
+                    
+                            <div class="quantity-selector d-flex justify-content-between">
+                                <button class="minus-btn btn btn-secondary" type="button" name="button">-</button>
+                                <input type="text" name="name" value="1" class="form-control">
+                                <button class="plus-btn btn btn-secondary" type="button" name="button">+</button>
+                            </div>
+                    
                             <span class="icon-cross">
-                                <img src="images/cross.svg" class="img-fluid">
+                                <img src="{% static 'images/cross.svg' %}" class="img-fluid">
                             </span>
                         </a>
                     </div>
-
                     {% endfor %}
                     <!-- End Column 1 -->
 

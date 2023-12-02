@@ -18,11 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from homeUser.views import homeUser
 from shop.views import shop
+from orders.views import pruebitaWhatsapp
 
 urlpatterns = [
     path('', include('homeUser.urls')),
     path('', include('user.urls')),
     path('', include('shop.urls')),
+    path('', include('orders.urls')),
     path('admin/', admin.site.urls),
     
 ]
