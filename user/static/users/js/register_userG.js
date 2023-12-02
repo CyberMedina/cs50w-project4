@@ -13,6 +13,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+// Función para hacer que el textarea se autocreciente
+  function autoGrowTextArea(textarea) {
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
+    // Actualizar el label con la cantidad de caracteres escritos y el límite (100)
+    const charCountLabel = document.getElementById("char-count-indicaciones");
+    const currentCount = textarea.value.length;
+    charCountLabel.textContent = `${currentCount}/100`;
+
+    // Limitar la escritura cuando se alcanzan los 100 caracteres
+    if (currentCount >= 100) {
+      textarea.value = textarea.value.slice(0, 100);
+      charCountLabel.style.color = "red"; // Cambiar el color del label si se alcanza el límite
+    } else {
+      charCountLabel.style.color = "#bbb"; // Restaurar el color del label si no se alcanza el límite
+    }
+  }
+
+  // Función para limitar el número de dígitos en el campo de teléfono a 8
+  function limitInputToEightDigits(event) {
+    const input = event.target;
+    const inputValue = input.value.replace(/\D/g, ''); // Elimina todos los caracteres no numéricos
+    const maxLength = 8;
+
+    if (inputValue.length > maxLength) {
+      // Trunca el valor a 8 dígitos si es más largo
+      input.value = inputValue.slice(0, maxLength);
+    } else {
+      input.value = inputValue; // Si tiene menos de 8 dígitos, simplemente asigna el valor sin cambios
+    }
+  }
+
+  // Evento de entrada para el textarea para ajustar su tamaño automáticamente
+  const textArea = document.getElementById("text");
+  if (textArea) {
+    textArea.addEventListener("input", function () {
+      autoGrowTextArea(this);
+    });
+  }
+
+  // Evento de entrada para el campo de teléfono para limitar a 8 dígitos
+  const phoneInput = document.querySelector("input[type='tel']");
+  if (phoneInput) {
+    phoneInput.addEventListener("input", function (event) {
+      limitInputToEightDigits(event);
+    });
+  }
 
 function moveSlider() {
   let register_user = this.dataset.value;
@@ -187,7 +235,6 @@ function initMap() {
     $("#latitude").val(latitude);
     $("#longitude").val(longitude);
 
-    alert("Address saved: " + address);
     $("#myModal").modal("hide");
   });
 }

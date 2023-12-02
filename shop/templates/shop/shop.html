@@ -76,6 +76,35 @@
                         list-style: none;
                         margin-bottom: 10px;
                     }
+
+                    .counter {
+                        width: 150px;
+                        margin: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .counter input {
+                        width: 50px;
+                        border: 0;
+                        line-height: 30px;
+                        font-size: 20px;
+                        text-align: center;
+                        background: #ff5757;
+                        color: #fff;
+                        appearance: none;
+                        outline: 0;
+                    }
+
+                    .counter span {
+                        display: block;
+                        font-size: 25px;
+                        padding: 0 10px;
+                        cursor: pointer;
+                        color: #ff5757;
+                        user-select: none;
+                    }
                 </style>
 
 
@@ -134,24 +163,28 @@
                     <!-- Start Column 1 -->
                     {% for producto in productos %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-6">
-                        <a class="product-item" href="{{ producto.id }}">
+                        <a class="product-item" href="{{ producto.id }}"
+                            onclick="firstStepShop(event, '{{ producto.id }}')">
                             <img src="{{ producto.imagen_url.url }}" class="img-fluid product-thumbnail">
                             <h3 class="product-title">{{ producto.nombre }}</h3>
                             <strong class="product-price">${{ producto.precio }}</strong>
-                    
-                            <div class="quantity-selector d-flex justify-content-between">
-                                <button class="minus-btn btn btn-secondary" type="button" name="button">-</button>
-                                <input type="text" name="name" value="1" class="form-control">
-                                <button class="plus-btn btn btn-secondary" type="button" name="button">+</button>
+
+                            <div class="counter" id="counter-div-{{ producto.id }}" style="display: none;">
+                                <span class="down" onClick='decreaseCount(event, this)'>-</span>
+                                <input type="text" value="1">
+                                <span class="up" onClick='increaseCount(event, this)'>+</span>
                             </div>
-                    
-                            <span class="icon-cross">
+
+                            <span class="icon-cross" id="cross-icon-{{ producto.id }}">
                                 <img src="{% static 'images/cross.svg' %}" class="img-fluid">
                             </span>
                         </a>
                     </div>
                     {% endfor %}
+
                     <!-- End Column 1 -->
+
+
 
 
                 </div>
@@ -167,6 +200,138 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+    window.onload(updateOffcanvas());
+
+    var carrito = {};
+
+    function updateOffcanvas() {
+        // Realiza una solicitud para obtener los datos del carrito
+        fetch('/get_cart/')
+            .then(response => response.json())
+            .then(data => {
+                // Obtén el cuerpo del offcanvas
+                var offcanvasBody = document.querySelector('#offCanvasShoppingList .offcanvas-body');
+
+                // Limpia el cuerpo del offcanvas
+                offcanvasBody.innerHTML = '';
+
+                // Agrega cada producto en el carrito al cuerpo del offcanvas
+                for (var id in data) {
+                    var producto = data[id];
+                    var nombre = producto.nombre;
+                    var precio = producto.precio;
+                    var cantidad = producto.cantidad;
+
+                    // Crea un nuevo elemento div para el producto
+                    var div = document.createElement('div');
+                    div.classList.add('offcanvas-product');
+                    div.innerHTML = `
+                        <h5>${nombre}</h5>
+                        <p>Cantidad: ${cantidad}</p>
+                        <p>Precio: ${precio}</p>
+                    `;
+
+                    // Agrega el div al cuerpo del offcanvas
+                    offcanvasBody.appendChild(div);
+                }
+            });
+    }
+
+    function firstStepShop(e, id) {
+        e.preventDefault();
+
+
+
+        // Obtén los elementos por ID
+        var crossIcon = document.getElementById('cross-icon-' + id);
+        var counterDiv = document.getElementById('counter-div-' + id);
+
+        // Oculta el icono de la cruz y muestra el div del contador
+        crossIcon.style.display = 'none';
+        counterDiv.style.display = 'block';
+
+        // Realiza una solicitud fetch para agregar el producto al carrito
+        fetch('/add_to_cart/', {
+            method: 'POST',
+            body: JSON.stringify({ 'product_id': id }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            // Actualiza la interfaz de usuario según sea necesario
+            // Actualiza el offcanvas
+            updateOffcanvas();
+        });
+    }
+
+    function increaseCount(a, b) {
+        var input = b.previousElementSibling;
+        var value = parseInt(input.value, 10);
+        value = isNaN(value) ? 0 : value;
+        value++;
+        input.value = value;
+
+        // Realiza una solicitud fetch para actualizar la cantidad en el carrito
+        var id = input.parentElement.parentElement.getAttribute('href');
+        carrito[id] = value;
+        fetch('/update_cart/', {
+            method: 'POST',
+            body: JSON.stringify({ 'product_id': id, 'quantity': value }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            // Actualiza la interfaz de usuario según sea necesario
+            updateOffcanvas();
+        });
+    }
+
+    function decreaseCount(a, b) {
+        var input = b.nextElementSibling;
+        var value = parseInt(input.value, 10);
+        if (value > 1) {
+            value = isNaN(value) ? 0 : value;
+            value--;
+            carrito[id] = value;
+            input.value = value;
+
+            // Realiza una solicitud fetch para actualizar la cantidad en el carrito
+            var id = input.parentElement.parentElement.getAttribute('href');
+            fetch('/update_cart/', {
+                method: 'POST',
+                body: JSON.stringify({ 'product_id': id, 'quantity': value }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                // Actualiza la interfaz de usuario según sea necesario
+                updateOffcanvas();
+            });
+        }
+    }
+
+
+        function vaciarCarrito(){ 
+        // Realiza una solicitud fetch para vaciar el carrito
+        fetch('/empty_cart/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            // Vacía el objeto carrito
+            carrito = {};
+
+            // Actualiza el offcanvas
+            updateOffcanvas();
+        });
+    }
+
+</script>
 
 {% endblock %}
 

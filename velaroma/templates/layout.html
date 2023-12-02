@@ -398,19 +398,39 @@
 
     document.getElementById('shopping-cart').addEventListener("click", function () {
       var offcanvasBody = document.querySelector('.offcanvas .offcanvas-body');
-
+  
       var offcanvasElement = document.getElementById('offCanvasShoppingList');
       var bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement);
-
+  
       if (offcanvasBody.innerHTML.trim() === '') {
-        offcanvasBody.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><p>El carrito aún está vacío</p></div>';
-      } else {
-        // El offcanvas no está vacío, no hacer nada
+          offcanvasBody.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><p>El carrito aún está vacío</p></div>';
       }
 
-      bsOffcanvas.show();
+      else{
+        var orders = document.getElementById('orders');
 
-    });
+        if(!orders){
+          offcanvasBody.innerHTML += '<a class="btn btn-primary mb-5" id="orders" href="/orders" style="background-color: #ff5757; border-color:#ff5757;">Ir a pagar</a>';
+        }
+       
+      }
+  
+      // Verifica si el botón ya existe
+      var vaciarCarritoButton = document.getElementById('vaciarCarrito');
+      if (!vaciarCarritoButton) {
+          // Si el botón no existe, agrégalo
+          vaciarCarritoButton = document.createElement('button');
+          vaciarCarritoButton.type = 'button';
+          vaciarCarritoButton.className = 'btn btn-danger mb-4';
+          vaciarCarritoButton.id = 'vaciarCarrito';
+          vaciarCarritoButton.textContent = 'Vaciar carrito';
+          vaciarCarritoButton.onclick = vaciarCarrito;
+          offcanvasBody.prepend(vaciarCarritoButton);
+      }
+  
+      bsOffcanvas.show();
+  });
+  
 
 
 
@@ -464,12 +484,8 @@
       </div>
       <div class="box">
         <h2>Sobre <span>nosotros</span></h2>
-        <p>Somos CoffeShop un negocio dedicado a la producción y comercialización de café, cultivado en las
-          mejoras
-          zonas cafetaleras de Nicaragua.</p>
-        <p><a class="footer-text-map" href="https://goo.gl/maps/6wVeDe94XpyQnCTX9"><i class="fa-solid fa-map-pin"
-              style="color: #6d1f00;"></i> Ciudad Jardín, Calle 13 Sur Oeste</a>
-        </p>
+        <p>Somos Velaroma un negocio orientado a la comercialización de veladroas aromaticas, con el mejor catalogo del
+          país!</p>
       </div>
       <div class="box">
         <h2>Siguenos en nuestras <span>redes sociales</span></h2>

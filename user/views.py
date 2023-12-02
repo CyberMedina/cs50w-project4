@@ -18,7 +18,6 @@ import json
 # Create your views here.
 
 
-
 # Vista para redirigir cuando el usuario se autentica por Google
 def register_userG(request):
 
@@ -29,24 +28,21 @@ def register_userG(request):
         request.user.is_first_time_Google = False
         request.user.save()
 
-
         return render(request, 'users/register_userG.html')
-    
+
     # Si el usuario no es su primera vez que se autentica por Google simplemente entra a la página principal
     else:
         return redirect('/')
-    
+
 
 @login_required
 def register_user_location(request):
-     return render(request, 'users/register_userG.html')
-    
-
-
+    return render(request, 'users/register_userG.html')
 
 
 def register_user(request):
     return render(request, 'users/register_user.html')
+
 
 def validation_register_API(request):
     if request.method == 'POST':
@@ -56,14 +52,13 @@ def validation_register_API(request):
 
         if CustomUser.objects.filter(email=data['email']).exists():
             return JsonResponse({'status': 'error', 'message': 'El correo electrónico ya está registrado!'})
-        
 
         CustomUser.objects.create_user(
-            
-            username = data['email'],
-            email= data['email'],
-            password= data['password'],
-            first_name= data['name'],
+
+            username=data['email'],
+            email=data['email'],
+            password=data['password'],
+            first_name=data['name'],
             last_name=data['lastname']
         )
 
@@ -72,13 +67,11 @@ def validation_register_API(request):
         if user is not None:
             auth_login(request, user)
 
-            return JsonResponse({'status': 'success', 'message' : 'Ha iniciado sesión!'})
-
+            return JsonResponse({'status': 'success', 'message': 'Ha iniciado sesión!'})
 
         return JsonResponse({'status': 'success'})
 
     return JsonResponse({'status': 'error'})
-
 
 
 def register_user_API(request):
@@ -86,8 +79,6 @@ def register_user_API(request):
         # data = json.loads(request.body)
 
         # print(data)
-
-      
 
         # if User.objects.filter(email=data['email']).exists():
         #     return JsonResponse({'status': 'error', 'message': 'El correo electrónico ya está registrado!'})
@@ -118,11 +109,10 @@ def register_user_API(request):
         #     password=make_password(data['password'])
         # )
 
-
-
         return JsonResponse({'status': 'success'})
 
     return JsonResponse({'status': 'error'})
+
 
 def login(request):
 
@@ -132,7 +122,6 @@ def login(request):
         password = request.POST.get('password')
 
         user_social_auth = UserSocialAuth.objects.filter(uid=email).first()
-
 
         if user_social_auth is None:
             user = authenticate(request, username=email, password=password)
@@ -145,10 +134,6 @@ def login(request):
         else:
             return JsonResponse({'status': 'error', 'message': 'Usted ha sido registrado por Google, por favor autentiquese con Google'})
 
-        
-
-
-    
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/') + '?openModal=true')
 
 
@@ -167,9 +152,11 @@ def register_by_access_token(request, backend):
         return JsonResponse({"status": 'Usuario ya registrado.'}, status=400)
 
     # si es un nuevo usuario, guarda los datos pero no inicies sesión
-    UserSocialAuth.objects.create(user=user, provider=backend.name, uid=user.email)
+    UserSocialAuth.objects.create(
+        user=user, provider=backend.name, uid=user.email)
     logout(request)
     return JsonResponse({"status": 'Usuario registrado exitosamente.'})
+
 
 @csrf_exempt
 def register_location_API(request):
@@ -178,27 +165,31 @@ def register_location_API(request):
         print(data)
         user = request.user
         if user.is_authenticated:
-            try:
-                direction_name = data.get('selectedRadioButton')
-                if not direction_name:
-                    return JsonResponse({'status': 'error', 'message': 'Por favor rellena los campos necesarios!'}, status=400)
-                location = NoStaffLocation(
-                    user=user,
-                    adress_input=data['addressInput'],
-                    direction_Name=direction_name,
-                    house_Number=data['houseNumber'],
-                    telephone_Number=data['telephoneNumber'],
-                    latitude=data['latitude'],
-                    longitude=data['longitude'],
-                    delivery_Instructions=data['text']
-                )
-                location.save()
-                return JsonResponse({'status': 'success'})
-            except Exception as e:
-                return JsonResponse({'status': 'error', 'message': 'Por favor rellena los campos necesarios!'}, status=500)
+
+            direction_name = data.get('selectedRadioButton')
+            if not direction_name or not data['addressInput'] or not data['telephoneNumber'] or not data['latitude'] or not data['longitude'] or not data['text']:
+                return JsonResponse({'status': 'error', 'message': 'Por favor rellena los campos necesarios!'}, status=400)
+
+            telephone_Number = data['telephoneNumber']
+            
+            if NoStaffLocation.objects.filter(telephone_Number=telephone_Number).exists():
+                return JsonResponse({'status': 'error', 'message': 'El número de teléfono ya ha sido registrado!'}, status=400)
+
+            location = NoStaffLocation(
+                user=user,
+                adress_input=data['addressInput'],
+                direction_Name=direction_name,
+                house_Number=data['houseNumber'],
+                telephone_Number=data['telephoneNumber'],
+                latitude=data['latitude'],
+                longitude=data['longitude'],
+                delivery_Instructions=data['text']
+            )
+            location.save()
+            return JsonResponse({'status': 'success'})
+
         else:
             return JsonResponse({'error': 'Usuario no autenticado'}, status=401)
-        
 
 
 def locations_user(request):
@@ -208,8 +199,7 @@ def locations_user(request):
 
         print(locations)
 
-
-        return render(request, 'users/locations_user.html', {'locations': locations })
+        return render(request, 'users/locations_user.html', {'locations': locations})
     else:
         return redirect('/')
 
@@ -218,7 +208,5 @@ def delete_location(request, id):
     location = NoStaffLocation.objects.get(id=id)
     location.delete()
     return redirect('locations_user')
-
-
 
 

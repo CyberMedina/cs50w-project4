@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from user.models import NoStaffLocation
 import requests
 import json
 from dotenv import load_dotenv
@@ -10,6 +11,25 @@ load_dotenv()
 
 # Create your views here.
 
+
+
+def orders(request):
+    carrito = request.session.get('carrito', {})
+    print(carrito)
+
+    # Calcular el total
+    total = sum(float(producto['precio']) * producto['cantidad'] for producto in carrito.values())
+
+    locations = None
+    if request.user.is_authenticated:
+        # Get the NoStaffLocation objects for the authenticated user
+        locations = NoStaffLocation.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        print("Entró al POST")
+        # Your existing POST method code here...
+
+    return render(request, 'orders/orders.html', {'carrito': carrito, 'total': total, 'locations': locations})
 
 @csrf_exempt
 def pruebitaWhatsapp(request):

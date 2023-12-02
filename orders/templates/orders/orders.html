@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block tittle %}Inicio{% endblock %}
+
+{% block customCSS %}
+{% endblock %}
+
+{% block body %}
+
+<div class="untree_co-section before-footer-section">
+  <div class="container">
+    <div class="row mb-5">
+      <form class="col-md-12" method="post">
+        <div class="site-blocks-table">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="product-thumbnail">Imagen</th>
+                <th class="product-name">Nombre del producto</th>
+                <th class="product-price">Precio</th>
+                <th class="product-quantity">Cantidad</th>
+                <th class="product-total">Total</th>
+                <th class="product-remove">Remover</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for id, producto in carrito.items %}
+              <tr>
+                <td class="product-thumbnail">
+                  <img src="images/product-1.png" alt="Image" class="img-fluid">
+                </td>
+                <td class="product-name">
+                  <h2 class="h5 text-black">{{ producto.nombre }}</h2>
+                </td>
+                <td>${{ producto.precio }}</td>
+                <td>{{ producto.cantidad }}</td>
+                <td>${{ producto.precio }}</td>
+                <td><a href="#" class="btn btn-black btn-sm">X</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row mb-5">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <button class="btn btn-black btn-sm btn-block" hidden>Update Cart</button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-outline-black btn-sm btn-block" hidden>Continue Shopping</button>
+          </div>
+        </div>
+        {% if user.is_authenticated %}
+
+        <div class="row">
+          <div class="col-md-12 border-bottom mb-5">
+            <label class="text-black h4" for="coupon">Datos del envío</label>
+          </div>
+          <div class="col-md-8 mb-3 mb-md-0">
+            <label class="text-black h6" for="coupon">Nombres</label>
+            <input type="text" class="form-control py-3" value="{{ user.first_name }}" name="name" name="name"
+              autocomplete="off" required maxlength="30" disabled>
+          </div>
+          <div class="col-md-8 mb-3 mb-md-0">
+            <label class="text-black h6" for="coupon">Apellidos</label>
+            <input type="text" class="form-control py-3" value="{{ user.last_name }}" name="lastname" name="lastname"
+              autocomplete="off" required maxlength="30" disabled>
+          </div>
+          <div class="col-md-8 mb-3 mb-md-0">
+            <label class="text-black h6" for="coupon">Seleccione su ubicación</label>
+            <select name="location">
+              {% for location in locations %}
+              <option value="{{ location.id }}">{{ location.direction_Name }}, {{ location.adress_input }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-8 mb-3 mb-md-0">
+            <label class="text-black h6" for="coupon">Número de teléfono</label>
+            <input type="text" value="{{ location.telephone_Number }}" class="form-control py-3"
+              id="telephoneNumberDisabled" name="telephoneNumberDisabled" autocomplete="off" required maxlength="30"
+              disabled>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 pl-5">
+        <div class="row justify-content-end">
+          <div class="col-md-7">
+            <div class="row">
+              <div class="col-md-12 text-right border-bottom mb-5">
+                <h3 class="text-black h4 text-uppercase">Total del carrito</h3>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <span class="text-black">Subtotal</span>
+              </div>
+              <div class="col-md-6 text-right">
+                <strong class="text-black">${{ total }}</strong>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <span class="text-black">Total</span>
+              </div>
+              <div class="col-md-6 text-right">
+                <strong class="text-black">${{ total }}</strong>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <button class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceder a
+                  pagar</button>
+              </div>
+            </div>
+
+
+            {% else %}
+            <form action="">
+              <div class="row">
+                <div class="col-md-12 border-bottom mb-5">
+                  <label class="text-black h4" for="coupon">Datos del envío</label>
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Nombres</label>
+                  <input type="text" class="form-control py-3" name="name" name="name" autocomplete="off" required
+                    maxlength="30">
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Apellidos</label>
+                  <input type="text" class="form-control py-3" name="lastname" name="lastname" autocomplete="off"
+                    required maxlength="30">
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Correo eléctronico</label>
+                  <input type="text" class="form-control py-3" name="email" name="email" autocomplete="off" required
+                    maxlength="100">
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Dirección exacta</label>
+                  <textarea name="" class="form-control" id="addressInput" name="addressInput" cols="30"
+                    rows="5"></textarea>
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Número de casa (opcional)</label>
+                  <input type="text" class="form-control py-3" name="houseNumber" name="houseNumber" autocomplete="off"
+                    required maxlength="10">
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Indicaciones de entrega</label>
+                  <input type="text" class="form-control py-3" name="text" name="text" autocomplete="off" required
+                    maxlength="100">
+                </div>
+                <div class="col-md-8 mb-3 mb-md-0">
+                  <label class="text-black h6" for="coupon">Número de teléfono</label>
+                  <input type="telf" class="form-control py-3" name="name" name="name" autocomplete="off" required
+                    maxlength="8">
+                </div>
+              </div>
+          </div>
+          <div class="col-md-6 pl-5">
+            <div class="row justify-content-end">
+              <div class="col-md-7">
+                <div class="row">
+                  <div class="col-md-12 text-right border-bottom mb-5">
+                    <h3 class="text-black h4 text-uppercase">Total del carrito</h3>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <span class="text-black">Subtotal</span>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <strong class="text-black">${{ total }}</strong>
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <div class="col-md-6">
+                    <span class="text-black">Total</span>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <strong class="text-black">${{ total }}</strong>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <button class="btn btn-black btn-lg py-3 btn-block"
+                      onclick="window.location='checkout.html'">Proceder a pagar</button>
+                  </div>
+                </div>
+                </form>
+
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var locationsData = {
+    {% for location in locations %}
+      '{{ location.id }}': {
+        'telephone_Number': '{{ location.telephone_Number }}',
+          'get_google_maps_url': '{{ location.get_google_maps_url }}'
+      },
+      {% endfor %}
+  };
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var selectElement = document.querySelector('select[name="location"]');
+
+        function updateInputsCombo() {
+          var selectedOption = selectElement.options[selectElement.selectedIndex];
+          var locationId = selectedOption.value;
+          var locationData = locationsData[locationId]; // asumiendo que locationsData está disponible
+
+          // Actualizar los inputs deshabilitados
+          document.getElementById('telephoneNumberDisabled').value = locationData.telephone_Number;
+        }
+
+        // Ejecutar la función al cargar la página
+        updateInputsCombo();
+
+        // Ejecutar la función cuando se cambia la opción seleccionada
+        selectElement.addEventListener('change', updateInputsCombo);
+      });
+    </script>
+
+    {% block searchbar %}
+    {% endblock %}
+
+    {% block branch %}
+    {% endblock %}
+
+
+    {% endblock %}

@@ -446,7 +446,6 @@ function initMap() {
     $("#latitude").val(latitude);
     $("#longitude").val(longitude);
 
-    alert("Address saved: " + address);
     $("#myModal").modal("hide");
   });
 }
