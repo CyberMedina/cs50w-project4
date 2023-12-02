@@ -150,6 +150,11 @@
           font-size: 14px;
           color: #6f6f6f;
         }
+
+        .inactive{
+          pointer-events: none;
+          cursor: default;
+        }
       </style>
 
 
@@ -162,9 +167,9 @@
           <li class="nav-item {% if request.resolver_match.url_name == 'shop' %}active{% endif %}">
             <a class="nav-link" href="{% url 'shop' %}">Tienda</a>
           </li>
-          <li><a class="nav-link" href="about.html">Acerca</a></li>
-          <li><a class="nav-link" href="services.html">Servicios</a></li>
-          <li><a class="nav-link" href="contact.html">Contactanos</a></li>
+          <li><a class="nav-link inactive" href="about.html">Acerca</a></li>
+          <li><a class="nav-link inactive" href="services.html">Servicios</a></li>
+          <li><a class="nav-link inactive" href="contact.html">Contactanos</a></li>
         </ul>
 
         <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
@@ -255,17 +260,10 @@
           <div class="card mb-3">
             <div class="card-body">
               <h5 class="card-title">{{ sucursal.nombre }}</h5>
-              <p class="card-text">Dirección: <a href="{{sucursal.direccion_maps}}" target="_blank">{{
-                  sucursal.direccion_texto }}</a></p>
-              <p class="card-text">Teléfono: {{ sucursal.telefono }}</p>
               <a href="#" onclick="setSucursal('{{ sucursal.id }}');" class="btn btn-primary">Seleccionar</a>
             </div>
           </div>
           {% endfor %}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>

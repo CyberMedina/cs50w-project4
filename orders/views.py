@@ -22,12 +22,10 @@ def orders(request):
 
     locations = None
     if request.user.is_authenticated:
-        # Get the NoStaffLocation objects for the authenticated user
         locations = NoStaffLocation.objects.filter(user=request.user)
 
     if request.method == 'POST':
         print("Entró al POST")
-        # Your existing POST method code here...
 
     return render(request, 'orders/orders.html', {'carrito': carrito, 'total': total, 'locations': locations})
 
