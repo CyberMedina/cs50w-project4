@@ -3,6 +3,7 @@
 # Project4: Velaroma
 
 Velaroma es una tienda en línea dedicada a la comercialización de veladoras aromáticas en forma de cupcakes donde podrás comprar tus veladoras aromaticas!
+Es un proyecto realizado para finalización de curso de Web50xNi
 
 ## Imagenes del proyecto
 
