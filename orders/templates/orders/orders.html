@@ -53,36 +53,40 @@
           </div>
         </div>
         {% if user.is_authenticated %}
+        <form action="/orders" method="POST">
 
-        <div class="row">
-          <div class="col-md-12 border-bottom mb-5">
-            <label class="text-black h4" for="coupon">Datos del envío</label>
+          <div class="row">
+            <div class="col-md-12 border-bottom mb-5">
+              <label class="text-black h4" for="coupon">Datos del envío</label>
+            </div>
+            <div class="col-md-8 mb-3 mb-md-0">
+              <label class="text-black h6" for="coupon">Nombres</label>
+              <input type="text" class="form-control py-3" value="{{ user.first_name }}" name="name" name="name"
+                autocomplete="off" required maxlength="30" disabled>
+            </div>
+            <div class="col-md-8 mb-3 mb-md-0">
+              <label class="text-black h6" for="coupon">Apellidos</label>
+              <input type="text" class="form-control py-3" value="{{ user.last_name }}" name="lastname" name="lastname"
+                autocomplete="off" required maxlength="30" disabled>
+            </div>
+            <div class="col-md-8 mb-3 mb-md-0">
+              <label class="text-black h6" for="coupon">Seleccione su ubicación</label>
+              <select name="location">
+                {% for location in locations %}
+                <option value="{{ location.id }}">{{ location.direction_Name }}, {{ location.adress_input }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-8 mb-3 mb-md-0">
+              <label class="text-black h6" for="coupon">Número de teléfono</label>
+              <input type="text" value="{{ location.telephone_Number }}" class="form-control py-3"
+                id="telephoneNumberDisabled" name="telephoneNumberDisabled" autocomplete="off" required maxlength="30"
+                disabled>
+            </div>
           </div>
-          <div class="col-md-8 mb-3 mb-md-0">
-            <label class="text-black h6" for="coupon">Nombres</label>
-            <input type="text" class="form-control py-3" value="{{ user.first_name }}" name="name" name="name"
-              autocomplete="off" required maxlength="30" disabled>
-          </div>
-          <div class="col-md-8 mb-3 mb-md-0">
-            <label class="text-black h6" for="coupon">Apellidos</label>
-            <input type="text" class="form-control py-3" value="{{ user.last_name }}" name="lastname" name="lastname"
-              autocomplete="off" required maxlength="30" disabled>
-          </div>
-          <div class="col-md-8 mb-3 mb-md-0">
-            <label class="text-black h6" for="coupon">Seleccione su ubicación</label>
-            <select name="location">
-              {% for location in locations %}
-              <option value="{{ location.id }}">{{ location.direction_Name }}, {{ location.adress_input }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-8 mb-3 mb-md-0">
-            <label class="text-black h6" for="coupon">Número de teléfono</label>
-            <input type="text" value="{{ location.telephone_Number }}" class="form-control py-3"
-              id="telephoneNumberDisabled" name="telephoneNumberDisabled" autocomplete="off" required maxlength="30"
-              disabled>
-          </div>
-        </div>
+
+        </form>
+
       </div>
       <div class="col-md-6 pl-5">
         <div class="row justify-content-end">
@@ -111,14 +115,16 @@
 
             <div class="row">
               <div class="col-md-12">
-                <button class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceder a
+                <button type="" class="btn btn-black btn-lg py-3 btn-block">Proceder a
                   pagar</button>
               </div>
             </div>
 
 
             {% else %}
-            <form action="">
+            <form action="{% url 'orders' %}" method="POST">
+              {% csrf_token %}
+              
               <div class="row">
                 <div class="col-md-12 border-bottom mb-5">
                   <label class="text-black h4" for="coupon">Datos del envío</label>
@@ -187,8 +193,7 @@
 
                 <div class="row">
                   <div class="col-md-12">
-                    <button class="btn btn-black btn-lg py-3 btn-block"
-                      onclick="window.location='checkout.html'">Proceder a pagar</button>
+                    <button class="btn btn-black btn-lg py-3 btn-block">Proceder a pagar</button>
                   </div>
                 </div>
                 </form>

@@ -25,7 +25,12 @@ def orders(request):
         locations = NoStaffLocation.objects.filter(user=request.user)
 
     if request.method == 'POST':
-        print("Entró al POST")
+        if request.user.is_authenticated:
+             print("Entró al POST con auntenticación")
+        
+        print("Entró al POST sin autenticación")
+
+       
 
     return render(request, 'orders/orders.html', {'carrito': carrito, 'total': total, 'locations': locations})
 
@@ -78,3 +83,6 @@ def pruebitaWhatsapp(request):
     
 
     return render(request, 'orders/pruebitaWhatsapp.html')
+
+
+
