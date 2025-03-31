@@ -12,6 +12,14 @@ Velaroma es una tienda en línea dedicada a la comercialización de veladoras ar
 ### Tienda
 <img src="assets/Tienda.png" width="800">
 
+### Uso de API de Google Maps para localización
+<img src="https://github.com/CyberMedina/cs50w-project4/blob/main/assets/google_maps_velaroma.png?raw=true" width="800">
+
+### Alertas y tooltips
+<img src="https://github.com/CyberMedina/cs50w-project4/blob/main/assets/alerts.png?raw=true" width="800">
+
+<img src="https://github.com/CyberMedina/cs50w-project4/blob/main/assets/tooltip_velaroma.png?raw=true" width="800">
+
 ### Admin Django
 <img src="assets/admin.png" width="800">
 
