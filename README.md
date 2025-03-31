@@ -1,3 +1,5 @@
+<img src="https://github.com/CyberMedina/cs50w-project4/blob/main/assets/banner_velaroma.png?raw=true" width="1000">
+
 # Project4: Velaroma
 
 Velaroma es una tienda en línea dedicada a la comercialización de veladoras aromáticas en forma de cupcakes donde podrás comprar tus veladoras aromaticas!
@@ -5,13 +7,13 @@ Velaroma es una tienda en línea dedicada a la comercialización de veladoras ar
 ## Imagenes del proyecto
 
 ### Landing page
-<img src="assets/LandingPage.png" height="300">
+<img src="assets/LandingPage.png" width="800">
 
 ### Tienda
-<img src="assets/Tienda.png" height="300">
+<img src="assets/Tienda.png" width="800">
 
 ### Admin Django
-<img src="assets/admin.png" height="300">
+<img src="assets/admin.png" width="800">
 
 ## Características:
 
